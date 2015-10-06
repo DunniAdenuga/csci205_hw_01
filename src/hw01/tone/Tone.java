@@ -15,6 +15,7 @@
  */
 package hw01.tone;
 
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.SourceDataLine;
 
 /**
@@ -34,14 +35,14 @@ public abstract class Tone {
     private final float amplitude;
 
     /**
-     * Sample rate in samples per second
+     * Create a new tone generator
+     *
+     * @param frequency The frequency of the output wave in hertz
+     * @param amplitude The amplitude of the output, on a scale of 0.0-1.0
      */
-    private final int sampleRate;
-
-    public Tone(float frequency, float amplitude, int sampleRate) {
+    public Tone(float frequency, float amplitude) {
         this.frequency = frequency;
         this.amplitude = amplitude;
-        this.sampleRate = sampleRate;
     }
 
     public float getAmplitude() {
@@ -52,16 +53,50 @@ public abstract class Tone {
         return frequency;
     }
 
-    public int getSampleRate() {
-        return sampleRate;
-    }
-
+    /**
+     * Writes audio data to a <code>SourceDataLine</code>, using a linear PCM
+     *
+     * @param out THE <code>SourceDataLine</code> to write to
+     * @throws UnsupportedOperationException If the audio format is not
+     * supported
+     */
     public void writeLoop(SourceDataLine out) {
+        float sampleRate = out.getFormat().getFrameRate();
+        int bits = out.getFormat().getSampleSizeInBits();
+        if (out.getFormat().getChannels() != 1) {
+            throw new UnsupportedOperationException(
+                    "SourceDataLine must have 1 channel");
+        }
+        if (out.getFormat().getFrameSize() > 4) {
+            throw new UnsupportedOperationException(
+                    "Output audio format maximum precision is 32 bits");
+        }
         int bufSize = out.getBufferSize();
         while (true) {
-            out.write(getSampleData(bufSize), 0, bufSize);
+            out.write(getSampleData(bufSize, out.getFormat()), 0, bufSize);
         }
     }
 
-    public abstract byte[] getSampleData(int length);
+    private byte[] getSampleData(int length, AudioFormat outFormat) {
+        int bytesPerFrame = outFormat.getFrameSize();
+        byte[] ret = new byte[length * bytesPerFrame];
+        float sampleRate = outFormat.getSampleRate();
+        int bitScale = (int) (1L << outFormat.getSampleSizeInBits() - 1);
+        for (int t = 0; t < length; t++) {
+            writeBits(ret, t, (int) (bitScale * getSample(t / sampleRate)),
+                      bytesPerFrame);
+        }
+        return ret;
+    }
+
+    private static void writeBits(byte[] array, int position, int data,
+                                  int length) {
+        int start = length * position;
+        for (int i = 0; i < length; i++) {
+            array[start + i] = (byte) (data & 0xff);
+            data >>= 8;
+        }
+    }
+
+    public abstract double getSample(double time);
 }
