@@ -15,10 +15,6 @@
  */
 package hw01.tone;
 
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.SourceDataLine;
 
@@ -68,6 +64,7 @@ public abstract class Tone {
     public void writeLoop(SourceDataLine out) {
         float sampleRate = out.getFormat().getFrameRate();
         int bits = out.getFormat().getSampleSizeInBits();
+        int period = (int) (2 * sampleRate / getFrequency()); // Unit: samples
         if (out.getFormat().getChannels() != 1) {
             throw new UnsupportedOperationException(
                     "SourceDataLine must have 1 channel");
@@ -76,17 +73,19 @@ public abstract class Tone {
             throw new UnsupportedOperationException(
                     "Output audio format maximum precision is 32 bits");
         }
-        //int outSize = 22050 
-        for(int i=0; i<1000; i++) {
+        while(true) {
             int outSize = out.available() / 2;
+            // Make outSize a multiple of period length to prevent jumps in output
+            outSize -= outSize % period;
+            int size = out.getBufferSize() / 2;
             byte[] array = getSampleData(outSize, out.getFormat());
             out.write(array, 0, array.length);
-            while (out.getBufferSize()/2 < out.available())   
+            // Wait for space to become available
+            while (out.available() < out.getBufferSize() / 2) {
                 try {
                     Thread.sleep(1);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Tone.class.getName()).log(Level.SEVERE, null, ex);
-                } 
+                } catch (InterruptedException ex) { }
+            }
         }
     }
 

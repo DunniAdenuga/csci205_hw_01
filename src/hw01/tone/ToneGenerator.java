@@ -45,10 +45,10 @@ public class ToneGenerator {
         //output.open(AudioSystem.getAudioInputStream(new File("0001.wav")));
         SourceDataLine output = AudioSystem.getSourceDataLine(new AudioFormat(
                 44100, 16, 1, true, true));
-        Tone tone = new SawtoothTone(440, 1.0f);
+        Tone tone = new SineTone(440, 1.0f);
         output.start();
-        tone.writeLoop(output);
-        Thread.sleep(4000);
+        //tone.writeLoop(output);
+        //Thread.sleep(4000);
         output.drain();
         output.close();
 
