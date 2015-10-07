@@ -28,6 +28,7 @@ public class SineTone extends Tone {
 
     @Override
     public double getSample(double time) {
+        //System.out.println(getAmplitude() * Math.sin(2 * Math.PI * time * getFrequency()));
         return getAmplitude() * Math.sin(2 * Math.PI * time * getFrequency());
     }
 

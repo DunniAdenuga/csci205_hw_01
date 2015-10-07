@@ -15,6 +15,10 @@
  */
 package hw01.tone;
 
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.SourceDataLine;
 
@@ -24,6 +28,7 @@ import javax.sound.sampled.SourceDataLine;
  * @author Tim Woodford
  */
 public abstract class Tone {
+
     /**
      * The frequency of the output in hertz
      */
@@ -71,28 +76,36 @@ public abstract class Tone {
             throw new UnsupportedOperationException(
                     "Output audio format maximum precision is 32 bits");
         }
-        int bufSize = out.getBufferSize();
-        while (true) {
-            out.write(getSampleData(bufSize, out.getFormat()), 0, bufSize);
+        //int outSize = 22050 
+        for(int i=0; i<1000; i++) {
+            int outSize = out.available() / 2;
+            byte[] array = getSampleData(outSize, out.getFormat());
+            out.write(array, 0, array.length);
+            while (out.getBufferSize()/2 < out.available())   
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Tone.class.getName()).log(Level.SEVERE, null, ex);
+                } 
         }
     }
 
-    private byte[] getSampleData(int length, AudioFormat outFormat) {
+    public byte[] getSampleData(int length, AudioFormat outFormat) {
         int bytesPerFrame = outFormat.getFrameSize();
         byte[] ret = new byte[length * bytesPerFrame];
         float sampleRate = outFormat.getSampleRate();
         int bitScale = (int) (1L << outFormat.getSampleSizeInBits() - 1);
         for (int t = 0; t < length; t++) {
             writeBits(ret, t, (int) (bitScale * getSample(t / sampleRate)),
-                      bytesPerFrame);
+                    bytesPerFrame);
         }
         return ret;
     }
 
     private static void writeBits(byte[] array, int position, int data,
-                                  int length) {
+            int length) {
         int start = length * position;
-        for (int i = 0; i < length; i++) {
+        for (int i = length - 1; i >= 0; i--) {
             array[start + i] = (byte) (data & 0xff);
             data >>= 8;
         }
