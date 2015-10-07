@@ -4,31 +4,32 @@
  *
  * Name: NAMES of team members
  * Date: Oct 6, 2015
- * Time: 8:51:33 PM
+ * Time: 8:55:14 PM
  *
  * Project: csci205_hw_01
  * Package: hw01.tone
- * File: TriangleTone
+ * File: SawtoothTone
  * Description:
  *
  * ****************************************
  */
-package hw01.tone;
+package hw01.source;
 
 /**
- * A triangle-wave tone generator
+ * A sawtooth tone generator
  *
+ * @see http://mathworld.wolfram.com/SawtoothWave.html
  * @author timothy
  */
-public class TriangleTone extends Tone {
+public class SawtoothTone extends Tone {
 
     /**
-     * Create a new triangle-wave tone generator
+     * Create a new sawtooth tone generator
      *
      * @param frequency The frequency of the output wave in hertz
      * @param amplitude The amplitude of the output, on a scale of 0.0-1.0
      */
-    public TriangleTone(float frequency, float amplitude) {
+    public SawtoothTone(float frequency, float amplitude) {
         super(frequency, amplitude);
     }
 
@@ -40,13 +41,8 @@ public class TriangleTone extends Tone {
      */
     @Override
     public double getSample(double time) {
-        time %= 1 / getFrequency();
-        double halfPeriod = 1 / (2 * getFrequency());
-        if (time < halfPeriod) {
-            return time / halfPeriod;
-        } else {
-            return 1 - (time - halfPeriod) / halfPeriod;
-        }
+        double period = 1 / getFrequency();
+        return (time % period) / period;
     }
 
 }

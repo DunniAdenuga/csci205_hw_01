@@ -2,34 +2,34 @@
  * CSCI205 - Software Engineering and Design
  * Fall 2015
  *
- * Name: NAMES of team members
+ * Name: Tim Woodford, Dunni
  * Date: Oct 6, 2015
- * Time: 8:55:14 PM
+ * Time: 8:42:28 PM
  *
  * Project: csci205_hw_01
  * Package: hw01.tone
- * File: SawtoothTone
+ * File: SquareTone
  * Description:
  *
  * ****************************************
  */
-package hw01.tone;
+package hw01.source;
 
 /**
- * A sawtooth tone generator
+ * Tone generator for a square wave
  *
- * @see http://mathworld.wolfram.com/SawtoothWave.html
- * @author timothy
+ * @see http://mathworld.wolfram.com/SquareWave.html
+ * @author Tim Woodford
  */
-public class SawtoothTone extends Tone {
+public class SquareTone extends Tone {
 
     /**
-     * Create a new sawtooth tone generator
+     * Create a new square-wave tone generator
      *
      * @param frequency The frequency of the output wave in hertz
      * @param amplitude The amplitude of the output, on a scale of 0.0-1.0
      */
-    public SawtoothTone(float frequency, float amplitude) {
+    public SquareTone(float frequency, float amplitude) {
         super(frequency, amplitude);
     }
 
@@ -41,8 +41,8 @@ public class SawtoothTone extends Tone {
      */
     @Override
     public double getSample(double time) {
-        double period = 1 / getFrequency();
-        return (time % period) / period;
+        time %= 1 / getFrequency();
+        return time > 1 / (2 * getFrequency()) ? getAmplitude() : 0;
     }
 
 }

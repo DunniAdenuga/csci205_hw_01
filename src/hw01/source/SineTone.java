@@ -2,34 +2,33 @@
  * CSCI205 - Software Engineering and Design
  * Fall 2015
  *
- * Name: Tim Woodford, Dunni
- * Date: Oct 6, 2015
- * Time: 8:42:28 PM
+ * Name: NAMES of team members
+ * Date: 06-Oct-2015
+ * Time: 15:55:40
  *
  * Project: csci205_hw_01
  * Package: hw01.tone
- * File: SquareTone
+ * File: SineTone
  * Description:
  *
  * ****************************************
  */
-package hw01.tone;
+package hw01.source;
 
 /**
- * Tone generator for a square wave
+ * Plays a sine-wave tone
  *
- * @see http://mathworld.wolfram.com/SquareWave.html
- * @author Tim Woodford
+ * @author tww014
  */
-public class SquareTone extends Tone {
+public class SineTone extends Tone {
 
     /**
-     * Create a new square-wave tone generator
+     * Create a new sine-wave tone generator
      *
      * @param frequency The frequency of the output wave in hertz
      * @param amplitude The amplitude of the output, on a scale of 0.0-1.0
      */
-    public SquareTone(float frequency, float amplitude) {
+    public SineTone(float frequency, float amplitude) {
         super(frequency, amplitude);
     }
 
@@ -41,8 +40,7 @@ public class SquareTone extends Tone {
      */
     @Override
     public double getSample(double time) {
-        time %= 1 / getFrequency();
-        return time > 1 / (2 * getFrequency()) ? getAmplitude() : 0;
+        return getAmplitude() * Math.sin(2 * Math.PI * time * getFrequency());
     }
 
 }

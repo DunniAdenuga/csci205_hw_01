@@ -13,7 +13,7 @@
  *
  * ****************************************
  */
-package hw01.tone;
+package hw01.source;
 
 import java.io.IOException;
 import javax.sound.sampled.AudioFormat;
