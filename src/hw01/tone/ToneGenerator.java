@@ -53,7 +53,7 @@ public class ToneGenerator {
                 System.out.println(event);
             });
 
-            tone.writeLoop(line);
+            tone.writeLoop(line, 2);
 
             line.drain();
         }

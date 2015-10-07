@@ -68,21 +68,23 @@ public abstract class Tone {
     /**
      * Writes audio data to a <code>SourceDataLine</code>, using a linear PCM
      *
-     * @param out THE <code>SourceDataLine</code> to write to
+     * @param out The <code>SourceDataLine</code> to write to
+     * @param duration The length of the output in seconds
      * @throws UnsupportedOperationException If the audio format is not
      * supported
      */
-    public void writeLoop(SourceDataLine out) {
+    public void writeLoop(SourceDataLine out, double duration) {
         checkAudioFormat(out);
         float sampleRate = out.getFormat().getFrameRate();
         int period = (int) (2 * sampleRate / getFrequency()); // Unit: samples
-        while (true) {
+        int samplesWritten = 0;
+        while (samplesWritten < duration * sampleRate) {
             int outSize = out.available() / 2;
             // Make outSize a multiple of period length to prevent jumps in output
             outSize -= outSize % period;
-            int size = out.getBufferSize() / 2;
             byte[] array = getSampleData(outSize, out.getFormat());
             out.write(array, 0, array.length);
+            samplesWritten += array.length;
             // Wait for space to become available
             while (out.available() < out.getBufferSize() / 2) {
                 try {
