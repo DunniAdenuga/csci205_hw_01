@@ -22,13 +22,24 @@ package hw01.tone;
  */
 public class SineTone extends Tone {
 
+    /**
+     * Create a new sine-wave tone generator
+     *
+     * @param frequency The frequency of the output wave in hertz
+     * @param amplitude The amplitude of the output, on a scale of 0.0-1.0
+     */
     public SineTone(float frequency, float amplitude) {
         super(frequency, amplitude);
     }
 
+    /**
+     * Get the sample value at the given time
+     *
+     * @param time The time since the beginning of the period
+     * @return The amplitude-adjusted sample size, on a scale of 0.0-1.0
+     */
     @Override
     public double getSample(double time) {
-        //System.out.println(getAmplitude() * Math.sin(2 * Math.PI * time * getFrequency()));
         return getAmplitude() * Math.sin(2 * Math.PI * time * getFrequency());
     }
 

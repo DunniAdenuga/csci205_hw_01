@@ -16,6 +16,7 @@
 package hw01.tone;
 
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioFormat.Encoding;
 import javax.sound.sampled.SourceDataLine;
 
 /**
@@ -46,10 +47,20 @@ public abstract class Tone {
         this.amplitude = amplitude;
     }
 
+    /**
+     * Get the output amplitude
+     *
+     * @return The amplitude of the output, on a scale of 0.0-1.0
+     */
     public float getAmplitude() {
         return amplitude;
     }
 
+    /**
+     * Get the output frequency
+     *
+     * @return The frequency of the output wave in hertz
+     */
     public float getFrequency() {
         return frequency;
     }
@@ -62,18 +73,10 @@ public abstract class Tone {
      * supported
      */
     public void writeLoop(SourceDataLine out) {
+        checkAudioFormat(out);
         float sampleRate = out.getFormat().getFrameRate();
-        int bits = out.getFormat().getSampleSizeInBits();
         int period = (int) (2 * sampleRate / getFrequency()); // Unit: samples
-        if (out.getFormat().getChannels() != 1) {
-            throw new UnsupportedOperationException(
-                    "SourceDataLine must have 1 channel");
-        }
-        if (out.getFormat().getFrameSize() > 4) {
-            throw new UnsupportedOperationException(
-                    "Output audio format maximum precision is 32 bits");
-        }
-        while(true) {
+        while (true) {
             int outSize = out.available() / 2;
             // Make outSize a multiple of period length to prevent jumps in output
             outSize -= outSize % period;
@@ -84,25 +87,72 @@ public abstract class Tone {
             while (out.available() < out.getBufferSize() / 2) {
                 try {
                     Thread.sleep(1);
-                } catch (InterruptedException ex) { }
+                } catch (InterruptedException ex) {
+                }
             }
         }
     }
 
-    public byte[] getSampleData(int length, AudioFormat outFormat) {
+    /**
+     * Check that the audio format is supported as an output
+     *
+     * @param out The output format
+     * @throws UnsupportedOperationException If the audio format is unsupported
+     */
+    private void checkAudioFormat(SourceDataLine out) throws UnsupportedOperationException {
+        if (out.getFormat().getChannels() != 1) {
+            throw new UnsupportedOperationException(
+                    "SourceDataLine must have 1 channel");
+        }
+        if (out.getFormat().getFrameSize() > 4) {
+            throw new UnsupportedOperationException(
+                    "Output audio format maximum precision is 32 bits");
+        }
+        if (!out.getFormat().isBigEndian()) {
+            throw new UnsupportedOperationException(
+                    "Output audio format must be big-endian");
+        }
+        if (out.getFormat().getEncoding() != Encoding.PCM_SIGNED) {
+            throw new UnsupportedOperationException(
+                    "Output must be linear signed PCM");
+        }
+    }
+
+    /**
+     * Get signed PCM data to write to an audio stream
+     *
+     * @param length The number of samples to get
+     * @param outFormat The audio format to use for output
+     * @return An array of bytes representing the requested number of samples
+     */
+    private byte[] getSampleData(int length, AudioFormat outFormat) {
         int bytesPerFrame = outFormat.getFrameSize();
         byte[] ret = new byte[length * bytesPerFrame];
         float sampleRate = outFormat.getSampleRate();
         int bitScale = (int) (1L << outFormat.getSampleSizeInBits() - 1);
         for (int t = 0; t < length; t++) {
-            writeBits(ret, t, (int) (bitScale * getSample(t / sampleRate)),
-                    bytesPerFrame);
+            writeBytes(ret, t, (int) (bitScale * getSample(t / sampleRate)),
+                       bytesPerFrame);
         }
         return ret;
     }
 
-    private static void writeBits(byte[] array, int position, int data,
-            int length) {
+    /**
+     * Write a certain number of bytes to the output stream
+     *
+     * This is loosely based on code from the JPEG encoder in Piston's rust
+     * image library.
+     *
+     * @see
+     * https://github.com/PistonDevelopers/image/blob/master/src/jpeg/encoder.rs
+     *
+     * @param array The array to write to
+     * @param position The position at which to start
+     * @param data The data to write
+     * @param length The number of bytes to write
+     */
+    private static void writeBytes(byte[] array, int position, int data,
+                                   int length) {
         int start = length * position;
         for (int i = length - 1; i >= 0; i--) {
             array[start + i] = (byte) (data & 0xff);
@@ -110,5 +160,11 @@ public abstract class Tone {
         }
     }
 
+    /**
+     * Get the sample value at the given time
+     *
+     * @param time The time since the beginning of the period
+     * @return The amplitude-adjusted sample size, on a scale of 0.0-1.0
+     */
     public abstract double getSample(double time);
 }
