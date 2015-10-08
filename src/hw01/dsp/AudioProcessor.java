@@ -19,7 +19,6 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 
@@ -87,7 +86,6 @@ public abstract class AudioProcessor extends FilterInputStream {
         len = in.read(b, off, len);
         if (len != -1) {
             float[] audioData = collapse(b, off, len);
-            System.out.println(Arrays.toString(audioData));
             processAudio(audioData);
             expand(b, off, len, audioData);
             index += len;

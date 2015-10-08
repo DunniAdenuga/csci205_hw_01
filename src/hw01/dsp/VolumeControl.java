@@ -37,11 +37,6 @@ public class VolumeControl extends AudioProcessor {
     }
 
     @Override
-    public int read() {
-        throw new RuntimeException("I don't want this to happen");
-    }
-
-    @Override
     protected void processAudio(float[] audioData) {
         for (int i = 0; i < audioData.length; i++) {
             audioData[i] *= scaleFactor;
