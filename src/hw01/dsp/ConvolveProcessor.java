@@ -21,15 +21,27 @@ import java.util.concurrent.ArrayBlockingQueue;
 import javax.sound.sampled.AudioFormat;
 
 /**
- * Class for convolution-based filters
+ * Class for finite impulse response filters based on a convolution
+ *
+ * This can be used for convolution-based reverb if you have an impulse response
+ * file
  *
  * @see http://mathworld.wolfram.com/Convolution.html
- * @author tww014
+ * @see http://dspguru.com/dsp/faqs/fir/basics
+ * @author Tim Woodford
  */
 public class ConvolveProcessor extends AudioProcessor {
     public final float[] convolveVector;
     private final ArrayBlockingQueue<Float> pastData;
 
+    /**
+     * Create a <code>ConvolveProcessor</code> with the specified input and
+     * convolution function
+     *
+     * @param in The input stream for audio data
+     * @param format The format of the audio data
+     * @param convolveVector The convolution function values
+     */
     public ConvolveProcessor(InputStream in, AudioFormat format,
                              float[] convolveVector) {
         super(in, format);
@@ -40,6 +52,11 @@ public class ConvolveProcessor extends AudioProcessor {
         pastData.addAll(Arrays.asList(initialValues));
     }
 
+    /**
+     * Convolve each point in time with the convolution vector
+     *
+     * @param audioData The audio data to update
+     */
     @Override
     protected void processAudio(float[] audioData) {
         for (int t = 0; t < audioData.length; t++) {
@@ -49,6 +66,11 @@ public class ConvolveProcessor extends AudioProcessor {
         }
     }
 
+    /**
+     * Convolve the current data queue with the convolution function
+     *
+     * @return The convolution result for the current time
+     */
     private float convolve() {
         float ret = 0;
         int t = convolveVector.length;

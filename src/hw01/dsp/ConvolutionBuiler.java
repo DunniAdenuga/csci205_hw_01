@@ -19,7 +19,7 @@ import java.io.InputStream;
 import javax.sound.sampled.AudioFormat;
 
 /**
- * Delay processor
+ * Builds discrete convolution-based filters
  *
  * @author tww014
  */
