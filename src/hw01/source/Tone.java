@@ -15,6 +15,8 @@
  */
 package hw01.source;
 
+import java.io.IOException;
+import java.io.InputStream;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioFormat.Encoding;
 import javax.sound.sampled.SourceDataLine;
@@ -169,4 +171,29 @@ public abstract class Tone {
      * @return The amplitude-adjusted sample size, on a scale of 0.0-1.0
      */
     public abstract double getSample(double time);
+    
+    private class ToneInputStream extends InputStream {
+        private final AudioFormat outFormat;
+        private final int bitScale;
+        private int index = 0;
+
+        public ToneInputStream(AudioFormat outFormat) {
+            this.outFormat = outFormat;
+            bitScale = (int) (1L << outFormat.getSampleSizeInBits() - 1);
+        }
+
+        @Override
+        public int read() throws IOException {
+            // Probably not the best possible performance
+            final float time = (index / outFormat.getFrameSize()) / outFormat.getSampleRate();
+            final int sample = (int) (bitScale * getSample(time));
+            final int shift = (outFormat.getFrameSize() - index % outFormat.getFrameSize() - 1) * 8;
+            index++;
+            return (sample >> shift) & 0xff;
+        }
+    }
+    
+    public InputStream getInputStream(AudioFormat format) {
+        return new ToneInputStream(format);
+    }
 }

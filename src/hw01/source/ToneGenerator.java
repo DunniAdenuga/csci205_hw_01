@@ -15,9 +15,13 @@
  */
 package hw01.source;
 
+import java.io.File;
 import java.io.IOException;
+import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineUnavailableException;
@@ -44,17 +48,13 @@ public class ToneGenerator {
         Tone tone = new SineTone(440, 1.0f);
 
         AudioFormat format = new AudioFormat(44100, 16, 1, true, true);
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+        DataLine.Info info = new DataLine.Info(Clip.class, format);
+        AudioInputStream stream = new AudioInputStream(tone.getInputStream(format), format, 44100);
 
-        try (SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info)) {
-            line.open(format);
+        try (Clip line = (Clip) AudioSystem.getLine(info)) {
+            line.open(stream);
             line.start();
-            line.addLineListener((LineEvent event) -> {
-                System.out.println(event);
-            });
-
-            tone.writeLoop(line, 2);
-
+            Thread.sleep(4000);
             line.drain();
         }
     }
