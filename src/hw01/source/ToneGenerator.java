@@ -15,7 +15,10 @@
  */
 package hw01.source;
 
+import hw01.dsp.VolumeControl;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -29,6 +32,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * @author tww014
  */
 public class ToneGenerator {
+
     /**
      * Play a tone. Code for opening the <code>SourceDataLine</code> is based on
      * code from www.wolinlabs.com.
@@ -45,7 +49,8 @@ public class ToneGenerator {
 
         AudioFormat format = new AudioFormat(44100, 16, 1, true, true);
         DataLine.Info info = new DataLine.Info(Clip.class, format);
-        AudioInputStream stream = new AudioInputStream(tone.getInputStream(format), format, 44100);
+        InputStream inStr = new VolumeControl(tone.getInputStream(format), format, 0.2f);
+        AudioInputStream stream = new AudioInputStream(inStr, format, 44100);
 
         try (Clip line = (Clip) AudioSystem.getLine(info)) {
             line.open(stream);
