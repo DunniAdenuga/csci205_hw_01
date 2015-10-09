@@ -3,32 +3,32 @@
  * Fall 2015
  *
  * Name: NAMES of team members
- * Date: 06-Oct-2015
- * Time: 15:55:40
+ * Date: Oct 6, 2015
+ * Time: 8:51:33 PM
  *
  * Project: csci205_hw_01
  * Package: hw01.tone
- * File: SineTone
+ * File: TriangleTone
  * Description:
  *
  * ****************************************
  */
-package hw01.tone;
+package hw01.source;
 
 /**
- * Plays a sine-wave tone
+ * A triangle-wave tone generator
  *
- * @author tww014
+ * @author timothy
  */
-public class SineTone extends Tone {
+public class TriangleTone extends Tone {
 
     /**
-     * Create a new sine-wave tone generator
+     * Create a new triangle-wave tone generator
      *
      * @param frequency The frequency of the output wave in hertz
      * @param amplitude The amplitude of the output, on a scale of 0.0-1.0
      */
-    public SineTone(float frequency, float amplitude) {
+    public TriangleTone(float frequency, float amplitude) {
         super(frequency, amplitude);
     }
 
@@ -40,7 +40,13 @@ public class SineTone extends Tone {
      */
     @Override
     public double getSample(double time) {
-        return getAmplitude() * Math.sin(2 * Math.PI * time * getFrequency());
+        time %= 1 / getFrequency();
+        double halfPeriod = 1 / (2 * getFrequency());
+        if (time < halfPeriod) {
+            return time / halfPeriod;
+        } else {
+            return 1 - (time - halfPeriod) / halfPeriod;
+        }
     }
 
 }

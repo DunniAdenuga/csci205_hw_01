@@ -13,15 +13,18 @@
  *
  * ****************************************
  */
-package hw01.tone;
+package hw01.source;
 
+import hw01.dsp.VolumeControl;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
@@ -29,6 +32,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  * @author tww014
  */
 public class ToneGenerator {
+
     /**
      * Play a tone. Code for opening the <code>SourceDataLine</code> is based on
      * code from www.wolinlabs.com.
@@ -44,17 +48,14 @@ public class ToneGenerator {
         Tone tone = new SineTone(440, 1.0f);
 
         AudioFormat format = new AudioFormat(44100, 16, 1, true, true);
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+        DataLine.Info info = new DataLine.Info(Clip.class, format);
+        InputStream inStr = new VolumeControl(tone.getInputStream(format), format, 0.2f);
+        AudioInputStream stream = new AudioInputStream(inStr, format, 44100);
 
-        try (SourceDataLine line = (SourceDataLine) AudioSystem.getLine(info)) {
-            line.open(format);
+        try (Clip line = (Clip) AudioSystem.getLine(info)) {
+            line.open(stream);
             line.start();
-            line.addLineListener((LineEvent event) -> {
-                System.out.println(event);
-            });
-
-            tone.writeLoop(line, 2);
-
+            Thread.sleep(4000);
             line.drain();
         }
     }
