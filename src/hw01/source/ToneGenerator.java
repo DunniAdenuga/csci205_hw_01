@@ -15,17 +15,6 @@
  */
 package hw01.source;
 
-import hw01.dsp.VolumeControl;
-import java.io.IOException;
-import java.io.InputStream;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
 /**
  *
  * @author tww014
@@ -43,20 +32,18 @@ public class ToneGenerator {
      * @throws javax.sound.sampled.UnsupportedAudioFileException
      * @throws javax.sound.sampled.LineUnavailableException
      */
-    public static void main(String[] args) throws LineUnavailableException, IOException, UnsupportedAudioFileException, InterruptedException {
-        Tone tone = new SineTone(440, 1.0f);
-
-        AudioFormat format = new AudioFormat(44100, 16, 1, true, true);
-        DataLine.Info info = new DataLine.Info(Clip.class, format);
-        InputStream inStr = new VolumeControl(tone.getInputStream(), format,
-                                              0.2f);
-        AudioInputStream stream = new AudioInputStream(inStr, format, 44100);
-
-        try (Clip line = (Clip) AudioSystem.getLine(info)) {
-            line.open(stream);
-            line.start();
-            Thread.sleep(4000);
-            line.drain();
-        }
-    }
+    /**
+     * public static void main(String[] args) throws LineUnavailableException,
+     * IOException, UnsupportedAudioFileException, InterruptedException { Tone
+     * tone = new SineTone(440, 1.0f);
+     *
+     * AudioFormat format = new AudioFormat(44100, 16, 1, true, true);
+     * DataLine.Info info = new DataLine.Info(Clip.class, format); InputStream
+     * inStr = new VolumeControl(tone.getInputStream(), format, 0.2f);
+     * AudioInputStream stream = new AudioInputStream(inStr, format, 44100);
+     *
+     * try (Clip line = (Clip) AudioSystem.getLine(info)) { line.open(stream);
+     * line.start(); Thread.sleep(4000); line.drain(); }
+    }*
+     */
 }
