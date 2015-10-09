@@ -5,7 +5,11 @@ package hw01.tone;
  * @author ia005
  */
 import com.sun.media.sound.WaveFileWriter;
+import hw01.source.SawtoothTone;
+import hw01.source.SineTone;
+import hw01.source.SquareTone;
 import hw01.source.Tone;
+import hw01.source.TriangleTone;
 import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.AudioFileFormat;
@@ -110,6 +114,40 @@ public class WavePlay {
     }
 
     /**
+     * Play
+     *
+     * @param audio - audioInputStream
+     * @throws InterruptedException
+     */
+    public static void playFile(AudioInputStream audio) throws InterruptedException {
+        Clip clip;
+
+        try {
+
+            DataLine.Info info = new DataLine.Info(Clip.class,
+                                                   audio.getFormat());
+
+            clip = (Clip) AudioSystem.getLine(info);
+
+            clip.open(audio);
+            clip.start();
+
+            Thread.sleep(4000);
+            //while (Thread.isInterrupted() == false) {
+            clip.drain();
+            //}
+            /**
+             * while (clip.isRunning() == false) { clip.stop(); }*
+             */
+            //clip.close();
+        } catch (LineUnavailableException e) {
+            System.out.print("Clip could not be created.");
+        } catch (IOException e) {
+            System.out.print("Problem.");
+        }
+    }
+
+    /**
      * Display info about wavefile
      *
      * @param wavefile - file
@@ -174,23 +212,38 @@ public class WavePlay {
      *
      * @param audio- audio too be downsampled
      * @param freq- percentage of downsampling
+     * @param time - tone time length
      * @return output of downsampling
-     * @see <a href
-     * ="http://stackoverflow.com/questions/15410725/java-resample-wav-soundfile-without-third-party-library"
+     *
      */
-    public static AudioInputStream downsample(AudioInputStream audio,
-                                              double freq) {
+    public static Tone downsample(Tone tone, String type, int time,
+                                  double freq) {
+        Tone newTone = null;
+        if (type.equals("1")) {
+            newTone = new SawtoothTone(
+                    (float) (tone.getFrequency() * (1 - (freq / 100))),
+                    tone.getAmplitude());
+        }
+        if (type.equals("2")) {
+            newTone = new SineTone(
+                    (float) (tone.getFrequency() * (1 - (freq / 100))),
+                    tone.getAmplitude());
+        }
+        if (type.equals("3")) {
+            newTone = new SquareTone(
+                    (float) (tone.getFrequency() * (1 - (freq / 100))),
+                    tone.getAmplitude());
+        }
+        if (type.equals("4")) {
+            newTone = new TriangleTone(
+                    (float) (tone.getFrequency() * (1 - (freq / 100))),
+                    tone.getAmplitude());
+        }
         AudioInputStream converted = null;
-        AudioFormat srcFormat = audio.getFormat();
-        AudioFormat dstFormat = new AudioFormat(srcFormat.getEncoding(),
-                                                (float) (srcFormat.getSampleRate() * (freq / 100)),
-                                                srcFormat.getSampleSizeInBits(),
-                                                srcFormat.getChannels(),
-                                                srcFormat.getFrameSize(),
-                                                srcFormat.getFrameRate(),
-                                                srcFormat.isBigEndian());
-        converted = AudioSystem.getAudioInputStream(dstFormat, audio);
-        return converted;
+
+        converted = new AudioInputStream(newTone.getInputStream(),
+                                         newTone.getFormat(), time);
+        return newTone;
     }
 
     /**
@@ -199,6 +252,8 @@ public class WavePlay {
      * @param wavfile- String wavefile to be downsampled
      * @param freq- percentage of downsampling
      * @return output of downsampling
+     * @see <a href
+     * ="http://stackoverflow.com/questions/15410725/java-resample-wav-soundfile-without-third-party-library"
      */
     public static AudioInputStream downsample(String wavfile, double freq) {
         AudioInputStream audio = null;
@@ -209,7 +264,7 @@ public class WavePlay {
             audio = AudioSystem.getAudioInputStream(audiofile);
             AudioFormat srcFormat = audio.getFormat();
             AudioFormat dstFormat = new AudioFormat(srcFormat.getEncoding(),
-                                                    (float) (srcFormat.getSampleRate() * (freq / 100)),
+                                                    (float) (srcFormat.getSampleRate() * (1 - (freq / 100))),
                                                     srcFormat.getSampleSizeInBits(),
                                                     srcFormat.getChannels(),
                                                     srcFormat.getFrameSize(),
