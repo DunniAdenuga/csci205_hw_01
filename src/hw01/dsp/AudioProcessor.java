@@ -54,7 +54,7 @@ public abstract class AudioProcessor extends FilterInputStream {
      * @param len The length of the input
      * @return A float array corresponding to the inputs
      */
-    protected float[] collapse(byte[] b, int off, int len) {
+    private float[] collapse(byte[] b, int off, int len) {
         final int frameSize = format.getFrameSize() / format.getChannels();
         final int total = len / frameSize;
         final float[] ret = new float[total];
@@ -83,7 +83,7 @@ public abstract class AudioProcessor extends FilterInputStream {
      * @param len The length of the data to write, in bytes
      * @param data The float array data
      */
-    protected void expand(byte[] b, int off, int len, float[] data) {
+    private void expand(byte[] b, int off, int len, float[] data) {
         final int frameSize = format.getFrameSize() / format.getChannels();
         int total = len / frameSize;
         ByteBuffer buf = ByteBuffer.wrap(b, off, len);
