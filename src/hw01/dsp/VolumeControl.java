@@ -15,8 +15,6 @@
  */
 package hw01.dsp;
 
-import java.io.InputStream;
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 
 /**
@@ -35,8 +33,8 @@ public class VolumeControl extends AudioProcessor {
      * @param format The input format
      * @param scaleFactor The factor to multiply the amplitudes by
      */
-    public VolumeControl(InputStream in, AudioFormat format, float scaleFactor) {
-        super(in, format);
+    public VolumeControl(AudioInputStream in, float scaleFactor) {
+        super(in);
         this.scaleFactor = scaleFactor;
     }
 
@@ -46,10 +44,11 @@ public class VolumeControl extends AudioProcessor {
      * @param stream The audio input
      * @param scaleFactor The factor to multiply the amplitudes by
      */
-    public VolumeControl(AudioInputStream stream, float scaleFactor) {
-        this(stream, stream.getFormat(), scaleFactor);
-    }
-
+    /**
+     * public VolumeControl(AudioInputStream stream, float scaleFactor) {
+     * this(stream, stream.getFormat(), scaleFactor);
+    }*
+     */
     /**
      * Scales the amplitude by a specified factor
      *
