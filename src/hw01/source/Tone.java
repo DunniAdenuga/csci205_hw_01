@@ -18,6 +18,7 @@ package hw01.source;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 
 /**
  * A generator for a tone of a specific wave type, frequency, and amplitude
@@ -35,10 +36,13 @@ public abstract class Tone {
      * The amplitude of the value, on a scale of 0.0-1.0
      */
     private final float amplitude;
+
     /**
-     * format for each tone
+     * Default output format - 44100Hz, 16bits, big endian
      */
-    private AudioFormat format = new AudioFormat(44100, 16, 1, true, true);
+    private static final AudioFormat DEFAULT_FORMAT = new AudioFormat(44100, 16,
+                                                                      1, true,
+                                                                      true);
 
     /**
      * Create a new tone generator
@@ -69,10 +73,6 @@ public abstract class Tone {
         return frequency;
     }
 
-    public AudioFormat getFormat() {
-        return format;
-    }
-
     /**
      * Get the sample value at the given time
      *
@@ -81,14 +81,24 @@ public abstract class Tone {
      */
     public abstract double getSample(double time);
 
+    /**
+     * An InputStream that outputs linear PCM-encoded audio data
+     *
+     * @author Tim Woodford
+     */
     private class ToneInputStream extends InputStream {
         private final AudioFormat outFormat;
         private final int bitScale;
         private int index = 0;
 
-        public ToneInputStream() {
-            this.outFormat = format;
-            bitScale = (int) (1L << outFormat.getSampleSizeInBits() - 1);
+        /**
+         * Create a new ToneInputStream that starts at time=0
+         *
+         * @param format The AudioFormat to use for output
+         */
+        public ToneInputStream(AudioFormat format) {
+            outFormat = format;
+            bitScale = (int) ((1L << outFormat.getSampleSizeInBits()) - 1);
         }
 
         @Override
@@ -102,7 +112,35 @@ public abstract class Tone {
         }
     }
 
-    public InputStream getInputStream() {
-        return new ToneInputStream();
+    /**
+     * Get an input stream that outputs Linear PCM-encoded
+     *
+     * @return LPCM-encoded audio data
+     */
+    public InputStream getInputStream(AudioFormat format) {
+        return new ToneInputStream(format);
+    }
+
+    /**
+     * Create a new AudioInputStream with LPCM-encoded data
+     *
+     * @param format The AudioFormat to use
+     * @param length The number of samples to output
+     * @return An LPCM-encoded AudioInputStream
+     */
+    public AudioInputStream getAudioInputStream(AudioFormat format, int length) {
+        return new AudioInputStream(getInputStream(format), format, length);
+    }
+
+    /**
+     * Create a new LPCM-encoded AudioInputStream that lasts for a certain
+     * amount of time
+     *
+     * @param time The time to play the tone in seconds
+     * @return The LPCM-encoded stream
+     */
+    public AudioInputStream getAudioInputStream(float time) {
+        return getAudioInputStream(DEFAULT_FORMAT,
+                                   (int) (time * DEFAULT_FORMAT.getFrameRate()));
     }
 }

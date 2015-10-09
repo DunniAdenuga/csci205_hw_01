@@ -1,8 +1,20 @@
 package hw01.tone;
 
-/**
+/* *****************************************
+ * CSCI205 - Software Engineering and Design
+ * Fall 2015
  *
- * @author ia005
+ * Name: Dunni Adenuga
+ * Tim Woodward
+ * Date: Oct 5, 2015
+ * Time: 8:41:24 AM
+ *
+ * Project: csci205_hw_01
+ * Package:
+ * File: WavePlay
+ * Description:
+ *
+ * ****************************************
  */
 import com.sun.media.sound.WaveFileWriter;
 import hw01.source.Tone;
@@ -18,22 +30,6 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-/* *****************************************
- * CSCI205 - Software Engineering and Design
- * Fall 2015
- *
- * Name: Dunni Adenuga
- Tim Woodward
- * Date: Oct 5, 2015
- * Time: 8:41:24 AM
- *
- * Project: csci205_hw_01
- * Package:
- * File: WavePlay
- * Description:
- *
- * ****************************************
- */
 public class WavePlay {
     /**
      * @see <a
@@ -81,13 +77,11 @@ public class WavePlay {
     public static void playFile(Tone tone, int time) throws InterruptedException {
         Clip clip;
         AudioInputStream audio;
-        //why hardcoding?
 
         try {
-            audio = new AudioInputStream(tone.getInputStream(), tone.getFormat(),
-                                         (int) (time * tone.getFormat().getFrameRate()));
+            audio = tone.getAudioInputStream(time);
             DataLine.Info info = new DataLine.Info(Clip.class,
-                                                   tone.getFormat());
+                                                   audio.getFormat());
 
             clip = (Clip) AudioSystem.getLine(info);
 

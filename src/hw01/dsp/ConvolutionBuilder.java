@@ -13,7 +13,7 @@
  *
  * ****************************************
  */
-package hw01.tone;
+package hw01.dsp;
 
 import java.io.InputStream;
 import javax.sound.sampled.AudioFormat;
@@ -23,7 +23,7 @@ import javax.sound.sampled.AudioFormat;
  *
  * @author tww014
  */
-public class ConvolutionBuiler {
+public class ConvolutionBuilder {
 
     /**
      * Create a new convolution-based delay that includes a single echo

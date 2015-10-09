@@ -120,16 +120,14 @@ public class UserInterface {
         }
         System.out.println(
                 "Information about your WaveForm is printed below! ");
-        WavePlay.display(new AudioInputStream(tone.getInputStream(),
-                                              tone.getFormat(), time));
+        WavePlay.display(tone.getAudioInputStream(time));
         System.out.print("Do you want to downsample the tone y | n?");
         if (input.next().equals("y")) {
             System.out.print(
                     "Please Enter the degree of percentage in percent: ");
             int deg = Integer.parseInt(input.next());
-            finalResult = WavePlay.downsample((new AudioInputStream(
-                                               tone.getInputStream(),
-                                               tone.getFormat(), time)), deg);
+            finalResult = WavePlay.downsample(tone.getAudioInputStream(time),
+                                              deg);
             System.out.print(
                     "Give a name for the file to save the downsampled version: ");
             String newFile = input.next();
