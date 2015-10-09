@@ -18,7 +18,6 @@ package hw01.source;
 import hw01.dsp.VolumeControl;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -49,7 +48,8 @@ public class ToneGenerator {
 
         AudioFormat format = new AudioFormat(44100, 16, 1, true, true);
         DataLine.Info info = new DataLine.Info(Clip.class, format);
-        InputStream inStr = new VolumeControl(tone.getInputStream(format), format, 0.2f);
+        InputStream inStr = new VolumeControl(tone.getInputStream(), format,
+                                              0.2f);
         AudioInputStream stream = new AudioInputStream(inStr, format, 44100);
 
         try (Clip line = (Clip) AudioSystem.getLine(info)) {
