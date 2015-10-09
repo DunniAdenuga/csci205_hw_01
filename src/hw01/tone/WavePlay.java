@@ -5,6 +5,7 @@ package hw01.tone;
  * @author ia005
  */
 import com.sun.media.sound.WaveFileWriter;
+import hw01.source.Tone;
 import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.AudioFileFormat;
