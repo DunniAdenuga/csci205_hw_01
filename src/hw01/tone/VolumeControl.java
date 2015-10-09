@@ -15,6 +15,7 @@
  */
 package hw01.tone;
 
+import hw01.dsp.AudioProcessor;
 import java.io.InputStream;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
