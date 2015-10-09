@@ -17,7 +17,6 @@ package hw01.dsp;
 
 import java.io.FilterInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -40,9 +39,9 @@ public abstract class AudioProcessor extends FilterInputStream {
      * @param in The input source
      * @param format The input format
      */
-    public AudioProcessor(InputStream in, AudioFormat format) {
+    public AudioProcessor(AudioInputStream in) {
         super(in);
-        this.format = format;
+        this.format = in.getFormat();
         bitScale = (int) ((1L << format.getSampleSizeInBits() / format.getChannels()) - 1);
     }
 
