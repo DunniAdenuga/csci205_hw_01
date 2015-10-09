@@ -16,6 +16,11 @@
  */
 package hw01.tone;
 
+import hw01.source.SawtoothTone;
+import hw01.source.SineTone;
+import hw01.source.SquareTone;
+import hw01.source.Tone;
+import hw01.source.TriangleTone;
 import java.io.IOException;
 import java.util.Scanner;
 import javax.sound.sampled.AudioInputStream;
