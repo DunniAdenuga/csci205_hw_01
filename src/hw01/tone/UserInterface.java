@@ -17,7 +17,7 @@
 package hw01.tone;
 
 import hw01.dsp.AudioProcessor;
-import hw01.dsp.ConvolutionBuiler;
+import hw01.dsp.ConvolutionBuilder;
 import hw01.dsp.VolumeControl;
 import hw01.source.SawtoothTone;
 import hw01.source.SineTone;
@@ -133,8 +133,8 @@ public class UserInterface {
 
         System.out.println(
                 "Information about your WaveForm is printed below! ");
-        WavePlay.display(new AudioInputStream(tone.getInputStream(),
-                                              tone.getFormat(), time));
+
+        WavePlay.display(tone.getAudioInputStream(time));
         downsampleTone(tone, typeTone);
         delayTone(tone, time);
         volumeTone(tone, time);
@@ -170,9 +170,7 @@ public class UserInterface {
         System.out.print(
                 "Give a name for the file to save the downsampled version: ");
         String newFile = input.next();
-        WavePlay.saveWav(new AudioInputStream(finalResult.getInputStream(),
-                                              finalResult.getFormat(), time),
-                         newFile);
+        WavePlay.saveWav(finalResult.getAudioInputStream(time), newFile);
         System.out.println("Playing downsampled file...");
         WavePlay.playFile(finalResult, time);
     }
@@ -183,10 +181,8 @@ public class UserInterface {
         float delay = Float.parseFloat(input.next());
         System.out.print("Enter delay mutiplier: ");
         float delayM = Float.parseFloat(input.next());
-        System.out.print("How Long do you want it played for ? ");
-        AudioProcessor proc = ConvolutionBuiler.simpleDelay(
-                new AudioInputStream(tone.getInputStream(),
-                                     tone.getFormat(), time), delay,
+        AudioProcessor proc = ConvolutionBuilder.simpleDelay(
+                tone.getAudioInputStream(time), delay,
                 delayM);
         System.out.print("Playing delayed file...");
         WavePlay.playFile(proc.getAudioStream(44100 * time));
@@ -202,7 +198,7 @@ public class UserInterface {
         float delayM = Float.parseFloat(input.next());
         System.out.print("How Long do you want it played for ? ");
         int time = Integer.parseInt(input.next());
-        AudioProcessor proc = ConvolutionBuiler.simpleDelay(
+        AudioProcessor proc = ConvolutionBuilder.simpleDelay(
                 AudioSystem.getAudioInputStream(new File(wavFile)), delay,
                 delayM / 100);
         System.out.print("Playing delayed file...");
@@ -215,8 +211,8 @@ public class UserInterface {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter a percentage volume adjuster: ");
         float volumeAdjust = Float.parseFloat(input.next());
-        AudioInputStream newAudio = new VolumeControl(new AudioInputStream(
-                tone.getInputStream(), tone.getFormat(), time), volumeAdjust).getAudioStream(
+        AudioInputStream newAudio = new VolumeControl(tone.getAudioInputStream(
+                time), volumeAdjust).getAudioStream(
                         44100 * time);
         System.out.print("Playing volume adjusted file...");
         WavePlay.playFile(newAudio);
@@ -225,6 +221,7 @@ public class UserInterface {
     }
 
     public static void volumeFile(String wavFile, int time) throws UnsupportedAudioFileException, InterruptedException, IOException {
+
         Scanner input = new Scanner(System.in);
         System.out.print("Enter a percentage volume adjuster: ");
         float volumeAdjust = Float.parseFloat(input.next());
@@ -235,5 +232,6 @@ public class UserInterface {
         WavePlay.playFile(newAudio);
         System.out.print("Volume Adjusted File saved in volumeAdjusted.wav.");
         WavePlay.saveWav(newAudio, "volumeAdjusted.wav");
+
     }
 }
