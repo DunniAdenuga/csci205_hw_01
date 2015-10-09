@@ -53,7 +53,7 @@ public class WavePlay {
 
             clip.open(audio);
             clip.start();
-            Thread.sleep(audio.getFrameLength());
+            Thread.sleep(4000);
             clip.drain();
 
             /**
@@ -93,10 +93,10 @@ public class WavePlay {
             clip.open(audio);
             clip.start();
 
-            Thread.sleep((int) (time * tone.getFormat().getFrameRate()));
-            while (Thread.interrupted() == false) {
-                clip.drain();
-            }
+            Thread.sleep(4000);
+            //while (Thread.isInterrupted() == false) {
+            clip.drain();
+            //}
             /**
              * while (clip.isRunning() == false) { clip.stop(); }*
              */
@@ -146,7 +146,6 @@ public class WavePlay {
      * @param audio- AudioInputStream
      * @throws IOException
      */
-
     public static void display(AudioInputStream audio) throws IOException {
         /*atch (IOException ex) {
          System.out.print("IO Exception issue.");*/
