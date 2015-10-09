@@ -205,6 +205,8 @@ public class WavePlay {
      * Downsample(reduce just sample frequency)
      *
      * @param audio- audio too be downsampled
+     * @param type - type of tone. 1 - sawtooth, 2- sinetone, 3- squaretone,
+     * 4-triangletone
      * @param freq- percentage of downsampling
      * @param time - tone time length
      * @return output of downsampling
