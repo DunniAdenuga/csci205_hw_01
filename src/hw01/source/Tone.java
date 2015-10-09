@@ -35,6 +35,10 @@ public abstract class Tone {
      * The amplitude of the value, on a scale of 0.0-1.0
      */
     private final float amplitude;
+    /**
+     * format for each tone
+     */
+    private AudioFormat format = new AudioFormat(44100, 16, 1, true, true);
 
     /**
      * Create a new tone generator
@@ -65,6 +69,10 @@ public abstract class Tone {
         return frequency;
     }
 
+    public AudioFormat getFormat() {
+        return format;
+    }
+
     /**
      * Get the sample value at the given time
      *
@@ -72,14 +80,14 @@ public abstract class Tone {
      * @return The amplitude-adjusted sample size, on a scale of 0.0-1.0
      */
     public abstract double getSample(double time);
-    
+
     private class ToneInputStream extends InputStream {
         private final AudioFormat outFormat;
         private final int bitScale;
         private int index = 0;
 
-        public ToneInputStream(AudioFormat outFormat) {
-            this.outFormat = outFormat;
+        public ToneInputStream() {
+            this.outFormat = format;
             bitScale = (int) (1L << outFormat.getSampleSizeInBits() - 1);
         }
 
@@ -93,8 +101,8 @@ public abstract class Tone {
             return (sample >> shift) & 0xff;
         }
     }
-    
-    public InputStream getInputStream(AudioFormat format) {
-        return new ToneInputStream(format);
+
+    public InputStream getInputStream() {
+        return new ToneInputStream();
     }
 }
