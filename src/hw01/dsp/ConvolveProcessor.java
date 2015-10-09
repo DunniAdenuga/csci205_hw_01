@@ -15,10 +15,9 @@
  */
 package hw01.dsp;
 
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.concurrent.ArrayBlockingQueue;
-import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 
 /**
  * Class for finite impulse response filters based on a convolution
@@ -42,9 +41,9 @@ public class ConvolveProcessor extends AudioProcessor {
      * @param format The format of the audio data
      * @param convolveVector The convolution function values
      */
-    public ConvolveProcessor(InputStream in, AudioFormat format,
+    public ConvolveProcessor(AudioInputStream in,
                              float[] convolveVector) {
-        super(in, format);
+        super(in);
         this.convolveVector = convolveVector;
         pastData = new ArrayBlockingQueue<>(convolveVector.length);
         Float[] initialValues = new Float[convolveVector.length];
