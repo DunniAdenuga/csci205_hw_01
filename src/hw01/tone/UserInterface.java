@@ -130,6 +130,7 @@ public class UserInterface {
 
         System.out.print("Please enter the amount of time for playing: ");
         time = Integer.parseInt(input.next());
+        System.out.print("Playing generated tone...");
         WavePlay.playFile(tone, time);
 
         System.out.println(
@@ -210,7 +211,7 @@ public class UserInterface {
         AudioProcessor proc = ConvolutionBuilder.simpleDelay(
                 tone.getAudioInputStream(time), delay,
                 delayM);
-        System.out.print("Playing delayed file...");
+        System.out.println("Playing delayed file...");
         WavePlay.playFile(proc.getAudioStream(44100 * time));
         System.out.print("Delay File saved in delayFile.wav ");
         WavePlay.saveWav(proc.getAudioStream(44100 * time), "delayFile.wav");
@@ -237,7 +238,7 @@ public class UserInterface {
                 delayM / 100);
         System.out.print("Playing delayed file...");
         WavePlay.playFile(proc.getAudioStream(44100 * time));
-        System.out.print("Delay File saved.");
+        System.out.println("Delay File saved in delayFile.wav");
         WavePlay.saveWav(proc.getAudioStream(44100 * time), "delayFile.wav");
     }
 
