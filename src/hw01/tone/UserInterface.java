@@ -86,13 +86,13 @@ public class UserInterface {
                     "Information about your WaveForm is printed below! ");
 
             WavePlay.display(wavFile);
+            downsampleFile(wavFile);
+            delayFile(wavFile);
+            volumeFile(wavFile, 5);
 
         } catch (IllegalArgumentException e) {
             System.out.print("Audio File not supported.");
         }
-        downsampleFile(wavFile);
-        delayFile(wavFile);
-        volumeFile(wavFile, 5);
 
     }
 
@@ -156,7 +156,7 @@ public class UserInterface {
         AudioInputStream finalResult = null;
         System.out.print(
                 "Please Enter the degree of downsampling in percent: ");
-        int deg = Integer.parseInt(input.next());
+        double deg = Double.parseDouble(input.next());
         finalResult = WavePlay.downsample(wavFile, deg);
 
         System.out.print(
