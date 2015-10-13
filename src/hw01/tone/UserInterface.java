@@ -152,12 +152,12 @@ public class UserInterface {
      */
     public static void downsampleFile(String wavfile) throws IOException, InterruptedException, LineUnavailableException {
         Scanner input = new Scanner(System.in);
-        String wavFile = null;
+
         AudioInputStream finalResult = null;
         System.out.print(
                 "Please Enter the degree of downsampling in percent: ");
         double deg = Double.parseDouble(input.next());
-        finalResult = WavePlay.downsample(wavFile, deg);
+        finalResult = WavePlay.downsample(wavfile, deg);
 
         System.out.print(
                 "Give a name for the file to save the downsampled version(end in .wav): ");
