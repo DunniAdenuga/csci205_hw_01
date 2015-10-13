@@ -16,13 +16,13 @@ package hw01.tone;
  *
  * ****************************************
  */
-import com.sun.media.sound.WaveFileWriter;
 import hw01.source.SawtoothTone;
 import hw01.source.SineTone;
 import hw01.source.SquareTone;
 import hw01.source.Tone;
 import hw01.source.TriangleTone;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFileFormat.Type;
@@ -36,11 +36,16 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class WavePlay {
     /**
+     * @param wavefile - wavefile to be played
+     * @throws java.io.FileNotFoundException
+     * @throws java.lang.InterruptedException
+     * @throws java.io.IOException
+     * @throws javax.sound.sampled.LineUnavailableException
      * @see <a
      * href="http://stackoverflow.com/questions/2416935/how-to-play-wav-files-with-java"
      * @author Dunni
      */
-    public static void playFile(String wavefile) throws InterruptedException {
+    public static void playFile(String wavefile) throws FileNotFoundException, InterruptedException, IOException, LineUnavailableException {
 
         File audioFile = new File(wavefile);
         AudioInputStream audio;
@@ -66,9 +71,10 @@ public class WavePlay {
             System.out.print("File not Supported");
         } catch (LineUnavailableException e) {
             System.out.print("Clip could not be created.");
-        } catch (IOException e) {
-            System.out.print("Problem.");
         }
+        /**
+         * catch (IOException e) { System.out.print("Problem."); }*
+         */
 
     }
 
@@ -77,8 +83,9 @@ public class WavePlay {
      * @param tone- tone to be played
      * @param time- length of time to be played
      * @throws InterruptedException - if user interrupts play
+     * @throws java.io.IOException
      */
-    public static void playFile(Tone tone, int time) throws InterruptedException {
+    public static void playFile(Tone tone, int time) throws InterruptedException, IOException, LineUnavailableException {
         Clip clip;
         AudioInputStream audio;
 
@@ -145,8 +152,10 @@ public class WavePlay {
      * Display info about wavefile
      *
      * @param wavefile - file
+     * @throws java.io.FileNotFoundException
+     * @throws java.io.IOException
      */
-    public static void display(String wavefile) {
+    public static void display(String wavefile) throws FileNotFoundException, IOException {
         File audioFile = new File(wavefile);
         try {
             AudioInputStream audio = AudioSystem.getAudioInputStream(audioFile);
@@ -168,9 +177,12 @@ public class WavePlay {
             }
         } catch (UnsupportedAudioFileException ex) {
             System.out.print("Audio File Unsupported.");
-        } catch (IOException ex) {
-
         }
+        /**
+         * catch (IOException ex) {
+         *
+         * }*
+         */
     }
 
     /**
@@ -204,16 +216,19 @@ public class WavePlay {
     /**
      * Downsample(reduce just sample frequency)
      *
+     * @param tone
      * @param audio- audio too be downsampled
      * @param type - type of tone. 1 - sawtooth, 2- sinetone, 3- squaretone,
      * 4-triangletone
      * @param freq- percentage of downsampling
      * @param time - tone time length
      * @return output of downsampling
+     * @throws java.io.IOException
      *
      */
     public static Tone downsample(Tone tone, String type, int time,
-                                  double freq) {
+                                  double freq) throws IOException {
+        System.out.println("Reducing Frequency");
         Tone newTone = null;
         if (type.equals("1")) {
             newTone = new SawtoothTone(
@@ -247,14 +262,17 @@ public class WavePlay {
      * @param wavfile- String wavefile to be downsampled
      * @param freq- percentage of downsampling
      * @return output of downsampling
+     * @throws java.io.FileNotFoundException
+     * @throws java.io.IOException
      * @see <a href
      * ="http://stackoverflow.com/questions/15410725/java-resample-wav-soundfile-without-third-party-library"
      */
-    public static AudioInputStream downsample(String wavfile, double freq) {
+    public static AudioInputStream downsample(String wavfile, double freq) throws FileNotFoundException, IOException {
         AudioInputStream audio = null;
         AudioInputStream converted = null;
+        File audiofile;
         try {
-            File audiofile = new File(wavfile);
+            audiofile = new File(wavfile);
 
             audio = AudioSystem.getAudioInputStream(audiofile);
             AudioFormat srcFormat = audio.getFormat();
@@ -284,13 +302,11 @@ public class WavePlay {
      */
     public static void saveWav(AudioInputStream converted, String newFile) throws IOException {
         File output;
-        WaveFileWriter writer;
 
         try {
 
             output = new File(newFile);
-            writer = new WaveFileWriter();
-            writer.write(converted, Type.WAVE, output);
+            AudioSystem.write(converted, Type.WAVE, output);
         } catch (IOException e) {
             System.out.print("IOException error.");
         }
