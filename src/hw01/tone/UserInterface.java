@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.Scanner;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
@@ -47,7 +48,7 @@ public class UserInterface {
      * @throws IOException
      * @throws InterruptedException
      */
-    public static void main(String[] args) throws IOException, InterruptedException, UnsupportedAudioFileException {
+    public static void main(String[] args) throws IOException, InterruptedException, UnsupportedAudioFileException, LineUnavailableException {
         Tone tone = null;
         Scanner input = new Scanner(System.in);
         System.out.println("Welcome to THE TONE");
@@ -71,7 +72,7 @@ public class UserInterface {
      * @throws InterruptedException
      * @throws IOException
      */
-    public static void existing() throws InterruptedException, IOException, UnsupportedAudioFileException {
+    public static void existing() throws InterruptedException, IOException, UnsupportedAudioFileException, LineUnavailableException {
         Scanner input = new Scanner(System.in);
         String wavFile;
 
@@ -101,7 +102,7 @@ public class UserInterface {
      * @throws IOException
      * @throws InterruptedException
      */
-    public static void generate() throws IOException, InterruptedException {
+    public static void generate() throws IOException, InterruptedException, LineUnavailableException {
         Scanner input = new Scanner(System.in);
         Tone tone = null;
         int time = 5;
@@ -141,7 +142,15 @@ public class UserInterface {
 
     }
 
-    public static void downsampleFile(String wavfile) throws IOException, InterruptedException {
+    /**
+     * Downsample a wave file
+     *
+     * @param wavfile - file to be downsampled
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws LineUnavailableException
+     */
+    public static void downsampleFile(String wavfile) throws IOException, InterruptedException, LineUnavailableException {
         Scanner input = new Scanner(System.in);
         String wavFile = null;
         AudioInputStream finalResult = null;
@@ -151,14 +160,23 @@ public class UserInterface {
         finalResult = WavePlay.downsample(wavFile, deg);
 
         System.out.print(
-                "Give a name for the file to save the downsampled version: ");
+                "Give a name for the file to save the downsampled version(end in .wav): ");
         String newFile = input.next();
         WavePlay.saveWav(finalResult, newFile);
         System.out.println("Playing downsampled file...");
         WavePlay.playFile(newFile);
     }
 
-    public static void downsampleTone(Tone tone, String typeTone) throws IOException, InterruptedException {
+    /**
+     * Downsample a Tone
+     *
+     * @param tone
+     * @param typeTone
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws LineUnavailableException
+     */
+    public static void downsampleTone(Tone tone, String typeTone) throws IOException, InterruptedException, LineUnavailableException {
         Tone finalResult = null;
         Scanner input = new Scanner(System.in);
 
@@ -168,13 +186,21 @@ public class UserInterface {
         double deg = Double.parseDouble(input.next());
         finalResult = WavePlay.downsample(tone, typeTone, time, deg);
         System.out.print(
-                "Give a name for the file to save the downsampled version: ");
+                "Give a name for the file to save the downsampled version(end in .wav): ");
         String newFile = input.next();
         WavePlay.saveWav(finalResult.getAudioInputStream(time), newFile);
         System.out.println("Playing downsampled file...");
         WavePlay.playFile(finalResult, time);
     }
 
+    /**
+     * Add delay to a tone
+     *
+     * @param tone
+     * @param time- amount of time to play new delayed file
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public static void delayTone(Tone tone, int time) throws IOException, InterruptedException {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter Delay Time: ");
@@ -190,6 +216,14 @@ public class UserInterface {
         WavePlay.saveWav(proc.getAudioStream(44100 * time), "delayFile.wav");
     }
 
+    /**
+     * Add delay to audio file
+     *
+     * @param wavFile- audiofile
+     * @throws UnsupportedAudioFileException
+     * @throws InterruptedException
+     * @throws IOException
+     */
     public static void delayFile(String wavFile) throws UnsupportedAudioFileException, InterruptedException, IOException {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter a delay time: ");
@@ -207,6 +241,14 @@ public class UserInterface {
         WavePlay.saveWav(proc.getAudioStream(44100 * time), "delayFile.wav");
     }
 
+    /**
+     * Add volume to tone
+     *
+     * @param tone
+     * @param time-amount of time to play new tone
+     * @throws InterruptedException
+     * @throws IOException
+     */
     public static void volumeTone(Tone tone, int time) throws InterruptedException, IOException {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter a percentage volume adjuster: ");
@@ -220,6 +262,15 @@ public class UserInterface {
         WavePlay.saveWav(newAudio, "volumeAdjusted.wav");
     }
 
+    /**
+     * Add volume to audio wave file
+     *
+     * @param wavFile
+     * @param time-amount of time to play new tone
+     * @throws UnsupportedAudioFileException
+     * @throws InterruptedException
+     * @throws IOException
+     */
     public static void volumeFile(String wavFile, int time) throws UnsupportedAudioFileException, InterruptedException, IOException {
 
         Scanner input = new Scanner(System.in);
