@@ -302,13 +302,16 @@ public class UserInterface {
         float delayM = Float.parseFloat(input.next());
         System.out.print("How Long do you want it played for ? ");
         int time = Integer.parseInt(input.next());
+        final AudioInputStream audioIn = AudioSystem.
+                getAudioInputStream(new File(wavFile));
         AudioProcessor proc = ConvolutionBuilder.simpleDelay(
-                AudioSystem.getAudioInputStream(new File(wavFile)), delay,
+                audioIn, delay,
                 delayM / 100);
+        int samples = (int) (audioIn.getFormat().getFrameRate() * time);
         System.out.print("Playing delayed file...");
-        WavePlay.playFile(proc.getAudioStream(44100 * time));
+        WavePlay.playFile(proc.getAudioStream(samples));
         System.out.println("Delay File saved in delayFile.wav");
-        WavePlay.saveWav(proc.getAudioStream(44100 * time), "delayFile.wav");
+        WavePlay.saveWav(proc.getAudioStream(samples), "delayFile.wav");
     }
 
     /**
