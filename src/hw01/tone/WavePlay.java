@@ -167,9 +167,9 @@ public class WavePlay {
             System.out.println(
                     "Number of frames per second: " + mainInfo.getFrameRate());
             System.out.println(
-                    "Length of waveform in frames" + audio.getFrameLength());
+                    "Length of waveform in frames: " + audio.getFrameLength());
             System.out.println(
-                    "Length of waveform in bytes " + mainInfo.getFrameSize() * mainInfo.getFrameRate());
+                    "Length of waveform in bytes: " + mainInfo.getFrameSize() * mainInfo.getFrameRate());
             if (mainInfo.isBigEndian()) {
                 System.out.println("Byte Order: Big-Endian ");
             } else {
