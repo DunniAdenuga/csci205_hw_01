@@ -110,7 +110,7 @@ public class UserInterface {
                 "Please what's the frequency of the tone to be generated ? ");
         float freq = Float.parseFloat(input.next());
         System.out.print(
-                "Please what's the amplitude of the tone to be generated ? ");
+                "Please what's the amplitude(> 0 < 1) of the tone to be generated ? ");
         float amp = Float.parseFloat(input.next());
         System.out.print(
                 "What type of tone ? enter 1 for SawtoothTone, 2 for SineTone, 3 for SquareTone, 4 for TriangleTone: ");
