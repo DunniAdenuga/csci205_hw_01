@@ -15,8 +15,7 @@
  */
 package hw01.dsp;
 
-import java.io.InputStream;
-import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 
 /**
  * Builds discrete convolution-based filters
@@ -35,15 +34,14 @@ public class ConvolutionBuilder {
      * @param delayMultiplier The volume percentage of the echo
      * @return A <code>ConvolutionProcessor</code> that produces a single echo
      */
-    public static ConvolveProcessor simpleDelay(InputStream in,
-                                                AudioFormat format,
+    public static ConvolveProcessor simpleDelay(AudioInputStream in,
                                                 float delayTime,
                                                 float delayMultiplier) {
-        int sampleDelay = (int) (format.getFrameRate() * delayTime);
+        int sampleDelay = (int) (in.getFormat().getFrameRate() * delayTime);
         float[] convolveVector = new float[sampleDelay + 1];
         convolveVector[0] = 1.0f;
         convolveVector[sampleDelay] = delayMultiplier;
-        return new ConvolveProcessor(in, format, convolveVector);
+        return new ConvolveProcessor(in, convolveVector);
     }
 
 }
