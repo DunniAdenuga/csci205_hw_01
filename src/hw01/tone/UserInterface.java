@@ -107,10 +107,10 @@ public class UserInterface {
         Tone tone = null;
         int time = 5;
         System.out.print(
-                "Please what's the frequency of the tone to be generated ? ");
+                "Please what's the frequency of the tone to be generated in Hz ? ");
         float freq = Float.parseFloat(input.next());
         System.out.print(
-                "Please what's the amplitude of the tone to be generated ? ");
+                "Please what's the amplitude of the tone to be generated (0.0-1.0) ? ");
         float amp = Float.parseFloat(input.next());
         System.out.print(
                 "What type of tone ? enter 1 for SawtoothTone, 2 for SineTone, 3 for SquareTone, 4 for TriangleTone: ");
@@ -278,7 +278,8 @@ public class UserInterface {
         System.out.print("Enter a percentage volume adjuster: ");
         float volumeAdjust = Float.parseFloat(input.next());
         AudioInputStream newAudio = new VolumeControl(
-                AudioSystem.getAudioInputStream(new File(wavFile)), volumeAdjust).getAudioStream(
+                AudioSystem.getAudioInputStream(new File(wavFile)), volumeAdjust).
+                getAudioStream(
                         44100 * time);
         System.out.print("Playing volume adjusted file...");
         WavePlay.playFile(newAudio);
