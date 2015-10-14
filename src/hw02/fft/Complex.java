@@ -78,4 +78,21 @@ public class Complex {
     public Complex multiply(double scalar) {
         return new Complex(scalar * real, scalar * imaginary);
     }
+
+    /**
+     * Check whether two instances of Complex are equal, defined as the real and
+     * imaginary components being equal
+     *
+     * @param o The other object
+     * @return True if the instances are equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Complex) {
+            Complex other = (Complex) o;
+            return real == other.real && imaginary == other.imaginary;
+        } else {
+            return false;
+        }
+    }
 }
