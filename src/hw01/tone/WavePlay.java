@@ -35,6 +35,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class WavePlay {
+
     /**
      * @param wavefile - wavefile to be played
      * @throws java.io.FileNotFoundException
@@ -99,7 +100,7 @@ public class WavePlay {
             clip.open(audio);
             clip.start();
 
-            Thread.sleep(4000);
+            Thread.sleep(time * 1000);
             //while (Thread.isInterrupted() == false) {
             clip.drain();
             //}
@@ -169,7 +170,8 @@ public class WavePlay {
             System.out.println(
                     "Length of waveform in frames" + audio.getFrameLength());
             System.out.println(
-                    "Length of waveform in bytes " + mainInfo.getFrameSize() * mainInfo.getFrameRate());
+                    "Length of waveform in bytes " + mainInfo.getFrameSize() * mainInfo.
+                    getFrameRate());
             if (mainInfo.isBigEndian()) {
                 System.out.println("Byte Order: Big-Endian ");
             } else {
@@ -277,8 +279,10 @@ public class WavePlay {
             audio = AudioSystem.getAudioInputStream(audiofile);
             AudioFormat srcFormat = audio.getFormat();
             AudioFormat dstFormat = new AudioFormat(srcFormat.getEncoding(),
-                                                    (float) (srcFormat.getSampleRate() * (1 - (freq / 100))),
-                                                    srcFormat.getSampleSizeInBits(),
+                                                    (float) (srcFormat.
+                                                    getSampleRate() * (1 - (freq / 100))),
+                                                    srcFormat.
+                                                    getSampleSizeInBits(),
                                                     srcFormat.getChannels(),
                                                     srcFormat.getFrameSize(),
                                                     srcFormat.getFrameRate(),
