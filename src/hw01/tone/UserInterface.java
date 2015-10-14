@@ -97,6 +97,23 @@ public class UserInterface {
     }
 
     /**
+     * Ask for the frequency until a properly formatted number is given
+     *
+     * @return The frequency
+     */
+    private static float getFrequency() {
+        Scanner input = new Scanner(System.in);
+        try {
+            System.out.print(
+                    "Please what's the frequency of the tone to be generated in Hz ? ");
+            return Float.parseFloat(input.next());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number format!");
+            return getFrequency();
+        }
+    }
+
+    /**
      * Generate new tone and work with it
      *
      * @throws IOException
@@ -106,15 +123,9 @@ public class UserInterface {
         Scanner input = new Scanner(System.in);
         Tone tone = null;
         int time = 5;
-        System.out.print(
-                "Please what's the frequency of the tone to be generated in Hz ? ");
-        float freq = Float.parseFloat(input.next());
-        System.out.print(
-                "Please what's the amplitude of the tone to be generated (0.0-1.0) ? ");
-        float amp = Float.parseFloat(input.next());
-        System.out.print(
-                "What type of tone ? enter 1 for SawtoothTone, 2 for SineTone, 3 for SquareTone, 4 for TriangleTone: ");
-        String typeTone = input.next();
+        float freq = getFrequency();
+        float amp = getAmplitude(input);
+        String typeTone = getToneType(input);
         if (typeTone.equals("1")) {
             tone = new SawtoothTone(freq, amp);
         }
@@ -144,6 +155,51 @@ public class UserInterface {
     }
 
     /**
+     * Ask the user for a tone type until a valid answer is given
+     *
+     * @param input The scanner to use for input
+     * @return A valid tone type
+     */
+    private static String getToneType(Scanner input) {
+        System.out.print(
+                "What type of tone ? enter 1 for SawtoothTone, 2 for SineTone, 3 for SquareTone, 4 for TriangleTone: ");
+        String typeTone = input.next();
+        try {
+            int num = Integer.parseInt(typeTone);
+            if (num > 0 && num <= 4) {
+                return typeTone;
+            } else {
+                return getToneType(input);
+            }
+        } catch (NumberFormatException nfe) {
+            return getToneType(input);
+        }
+    }
+
+    /**
+     * Ask the user for an amplitude until a valid answer is given
+     *
+     * @param input The scanner to use for input
+     * @return A valid amplitude
+     */
+    private static float getAmplitude(Scanner input) {
+        try {
+            System.out.print(
+                    "Please what's the amplitude of the tone to be generated (0.0-1.0) ? ");
+            float amp = Float.parseFloat(input.next());
+            if (amp >= 0 && amp <= 1) {
+                return amp;
+            } else {
+                System.out.println("Number outside of accepted range");
+                return getAmplitude(input);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Not a valid number!");
+            return getAmplitude(input);
+        }
+    }
+
+    /**
      * Downsample a wave file
      *
      * @param wavfile - file to be downsampled
@@ -169,6 +225,23 @@ public class UserInterface {
     }
 
     /**
+     * Ask a question until the user gives a valid number
+     *
+     * @param question The question to ask
+     * @param input The scanner to use
+     * @return A double from user input
+     */
+    private static double askDouble(String question, Scanner input) {
+        System.out.print(question);
+        try {
+            return Double.parseDouble(input.next());
+        } catch (NumberFormatException nfe) {
+            System.out.println("Not a valid number!");
+            return askDouble(question, input);
+        }
+    }
+
+    /**
      * Downsample a Tone
      *
      * @param tone
@@ -182,9 +255,7 @@ public class UserInterface {
         Scanner input = new Scanner(System.in);
 
         int time = 5;
-        System.out.print(
-                "Please Enter the degree of downsample in percent: ");
-        double deg = Double.parseDouble(input.next());
+        double deg = askDouble("Please Enter the degree of downsample in percent: ", input);
         finalResult = WavePlay.downsample(tone, typeTone, time, deg);
         System.out.print(
                 "Give a name for the file to save the downsampled version(end in .wav): ");
@@ -204,10 +275,8 @@ public class UserInterface {
      */
     public static void delayTone(Tone tone, int time) throws IOException, InterruptedException {
         Scanner input = new Scanner(System.in);
-        System.out.print("Enter Delay Time: ");
-        float delay = Float.parseFloat(input.next());
-        System.out.print("Enter delay mutiplier: ");
-        float delayM = Float.parseFloat(input.next());
+        float delay = (float) askDouble("Enter Delay Time (in seconds): ", input);
+        float delayM = (float) askDouble("Enter delay amplitude mutiplier: ", input);
         AudioProcessor proc = ConvolutionBuilder.simpleDelay(
                 tone.getAudioInputStream(time), delay,
                 delayM);
