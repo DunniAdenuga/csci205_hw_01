@@ -95,4 +95,13 @@ public class Complex {
             return false;
         }
     }
+    /**
+    *Magnitude of complex number
+    *@author Dunni Adenuga
+    */
+    public double magnitude(){
+    double mag;
+    mag = Math.pow(real, 2)+Math.pow(imaginary, 2);
+    return mag;
+    }
 }
