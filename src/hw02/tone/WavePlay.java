@@ -16,11 +16,11 @@ package hw02.tone;
  *
  * ****************************************
  */
-import hw01.source.SawtoothTone;
-import hw01.source.SineTone;
-import hw01.source.SquareTone;
-import hw01.source.Tone;
-import hw01.source.TriangleTone;
+import hw02.source.SawtoothTone;
+import hw02.source.SineTone;
+import hw02.source.SquareTone;
+import hw02.source.Tone;
+import hw02.source.TriangleTone;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -281,8 +281,8 @@ public class WavePlay {
             AudioFormat dstFormat = new AudioFormat(srcFormat.getEncoding(),
                                                     (float) (srcFormat.
                                                              getSampleRate() * (1 - (freq / 100))),
-                                                    srcFormat.
-                                                    getSampleSizeInBits(),
+
+                                                    srcFormat.getSampleSizeInBits(),
                                                     srcFormat.getChannels(),
                                                     srcFormat.getFrameSize(),
                                                     srcFormat.getFrameRate(),
