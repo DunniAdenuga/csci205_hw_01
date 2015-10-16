@@ -55,8 +55,23 @@ public abstract class AudioProcessor extends FilterInputStream {
      */
     private float[] collapse(byte[] b, int off, int len) {
         final int frameSize = format.getFrameSize() / format.getChannels();
+        return byteArrayToFloats(b, off, len, frameSize);
+    }
+
+    /**
+     * Collapse the bytes in the input into an array of floats
+     *
+     * @param b The bytes in the input
+     * @param off The starting offset
+     * @param len The length of the input
+     * @param frameSize The size of the frame in bytes
+     * @return A float array corresponding to the inputs
+     */
+    public static float[] byteArrayToFloats(byte[] b, int off, int len,
+                                            int frameSize) {
         final int total = len / frameSize;
         final float[] ret = new float[total];
+        final int bitScale = (int) ((1L << frameSize * 8) - 1);
         final ByteBuffer buf = ByteBuffer.wrap(b, off, len);
         for (int i = 0; i < total; i++) {
             int curr = 0;
