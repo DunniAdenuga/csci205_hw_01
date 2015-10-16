@@ -93,7 +93,8 @@ public class DFT {
         ByteArrayOutputStream bae = new ByteArrayOutputStream();
         int nBufferSize = 1024;//* tone.getAudioFormat().getFrameSize();
         /**
-         * System.out.println(nBufferSize); System.out.println(nBufferSize / 1024);
+         * System.out.println(nBufferSize); System.out.println(nBufferSize /
+         * 1024);
          */
         byte[] stuff = new byte[nBufferSize];
         while (true) {
@@ -131,6 +132,7 @@ public class DFT {
         byte[] byteArray = tryStuff();
         double[] doubleArray = toDoubleArray(byteArray);
         Complex[] input = new Complex[doubleArray.length];
+        System.out.println(doubleArray.length);
         for (int i = 0; i < input.length; i++) {
             input[i] = new Complex(doubleArray[i], 0);
         }
