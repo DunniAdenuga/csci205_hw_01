@@ -280,9 +280,9 @@ public class WavePlay {
             AudioFormat srcFormat = audio.getFormat();
             AudioFormat dstFormat = new AudioFormat(srcFormat.getEncoding(),
                                                     (float) (srcFormat.
-                                                    getSampleRate() * (1 - (freq / 100))),
-                                                    srcFormat.
-                                                    getSampleSizeInBits(),
+                                                             getSampleRate() * (1 - (freq / 100))),
+
+                                                    srcFormat.getSampleSizeInBits(),
                                                     srcFormat.getChannels(),
                                                     srcFormat.getFrameSize(),
                                                     srcFormat.getFrameRate(),

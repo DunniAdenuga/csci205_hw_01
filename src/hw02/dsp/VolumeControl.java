@@ -7,7 +7,10 @@
  * Time: 11:35:17 PM
  *
  * Project: csci205_hw_01
+
+ 
  * Package: hw02.dsp
+
  * File: VolumeControl
  * Description:
  *
@@ -46,8 +49,9 @@ public class VolumeControl extends AudioProcessor {
      */
     /**
      * public VolumeControl(AudioInputStream stream, float scaleFactor) {
-     * this(stream, stream.getFormat(), scaleFactor);
-    }*
+     *
+     *
+     * this(stream, stream.getFormat(), scaleFactor); }*
      */
     /**
      * Scales the amplitude by a specified factor

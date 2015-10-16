@@ -45,6 +45,22 @@ public class Complex {
     }
 
     /**
+     * @return real part
+     * @author Dunni Adenuga
+     */
+    public double getReal() {
+        return this.real;
+    }
+
+    /**
+     * @return imaginary part
+     * @author Dunni Adenuga
+     */
+    public double getImaginary() {
+        return this.imaginary;
+    }
+
+    /**
      * Add two complex numbers
      *
      * @param other The other complex number
@@ -53,6 +69,15 @@ public class Complex {
      */
     public Complex add(Complex other) {
         return new Complex(real + other.real, imaginary + other.imaginary);
+    }
+
+    /**
+     * Subtract 2 complex numbers
+     *
+     * @ Dunni Adenuga
+     */
+    public Complex minus(Complex other) {
+        return new Complex(real - other.real, imaginary - other.imaginary);
     }
 
     /**
@@ -95,13 +120,15 @@ public class Complex {
             return false;
         }
     }
+
     /**
-    *Magnitude of complex number
-    *@author Dunni Adenuga
-    */
-    public double magnitude(){
-    double mag;
-    mag = Math.pow(real, 2)+Math.pow(imaginary, 2);
-    return mag;
+     * Magnitude of complex number
+     *
+     * @author Dunni Adenuga
+     */
+    public double magnitude() {
+        double mag;
+        mag = Math.sqrt(Math.pow(real, 2) + Math.pow(imaginary, 2));
+        return mag;
     }
 }

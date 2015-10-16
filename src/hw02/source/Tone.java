@@ -55,6 +55,10 @@ public abstract class Tone {
         this.amplitude = amplitude;
     }
 
+    public AudioFormat getAudioFormat() {
+        return DEFAULT_FORMAT;
+    }
+
     /**
      * Get the output amplitude
      *

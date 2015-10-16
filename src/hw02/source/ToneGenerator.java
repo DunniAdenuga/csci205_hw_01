@@ -8,6 +8,7 @@
  *
  * Project: csci205_hw_01
  * Package: hw02
+
  * File: ToneGenerator
  * Description:
  *
@@ -43,7 +44,6 @@ public class ToneGenerator {
      * AudioInputStream stream = new AudioInputStream(inStr, format, 44100);
      *
      * try (Clip line = (Clip) AudioSystem.getLine(info)) { line.open(stream);
-     * line.start(); Thread.sleep(4000); line.drain(); }
-    }*
+     * line.start(); Thread.sleep(4000); line.drain(); } }*
      */
 }

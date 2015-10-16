@@ -8,7 +8,10 @@
  * Time: 3:56:59 PM
  *
  * Project: csci205_hw_01
+
+
  * Package: hw02.tone
+
  * File: UserInterface
  * Description:
  *
@@ -255,7 +258,10 @@ public class UserInterface {
         Scanner input = new Scanner(System.in);
 
         int time = 5;
-        double deg = askDouble("Please Enter the degree of downsample in percent: ", input);
+
+        double deg = askDouble(
+                "Please Enter the degree of downsample in percent: ", input);
+
         finalResult = WavePlay.downsample(tone, typeTone, time, deg);
         System.out.print(
                 "Give a name for the file to save the downsampled version(end in .wav): ");
@@ -276,7 +282,10 @@ public class UserInterface {
     public static void delayTone(Tone tone, int time) throws IOException, InterruptedException {
         Scanner input = new Scanner(System.in);
         float delay = (float) askDouble("Enter Delay Time (in seconds): ", input);
-        float delayM = (float) askDouble("Enter delay amplitude mutiplier: ", input);
+
+        float delayM = (float) askDouble("Enter delay amplitude mutiplier: ",
+                                         input);
+
         AudioProcessor proc = ConvolutionBuilder.simpleDelay(
                 tone.getAudioInputStream(time), delay,
                 delayM);
