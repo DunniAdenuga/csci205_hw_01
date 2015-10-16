@@ -15,12 +15,12 @@
  */
 package hw02.tone;
 
+import hw02.dsp.AudioProcessor;
 import hw02.fft.Complex;
 import hw02.source.SineTone;
 import hw02.source.Tone;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import javax.sound.sampled.AudioInputStream;
 
 /**
@@ -91,11 +91,12 @@ public class DFT {
         Tone tone = new SineTone(440, (float) 0.95);
         AudioInputStream toneStream = tone.getAudioInputStream(5);
         ByteArrayOutputStream bae = new ByteArrayOutputStream();
-        int nBufferSize = 1024;//* tone.getAudioFormat().getFrameSize();
-        /**
-         * System.out.println(nBufferSize); System.out.println(nBufferSize /
-         * 1024);
-         */
+        int nBufferSize = 1024 * tone.getAudioFormat().getFrameSize();
+
+        System.out.println(nBufferSize);
+        System.out.println(nBufferSize
+                           / 1024);
+
         byte[] stuff = new byte[nBufferSize];
         while (true) {
             int nBytesRead = toneStream.read(stuff);
@@ -115,26 +116,28 @@ public class DFT {
      * http://stackoverflow.com/questions/15533854/converting-byte-array-to-double-array
      * @return
      */
-    public static double[] toDoubleArray(byte[] byteArray) {
-        int times = Double.SIZE / Byte.SIZE;
-        double[] doubles = new double[byteArray.length / times];
-        for (int i = 0; i < doubles.length; i++) {
-            doubles[i] = ByteBuffer.wrap(byteArray, i * times, times).getDouble();
-        }
-        return doubles;
-    }
-
+    /**
+     * public static double[] toDoubleArray(byte[] byteArray) { int times =
+     * Double.SIZE / Byte.SIZE; double[] doubles = new double[byteArray.length /
+     * times]; for (int i = 0; i < doubles.length; i++) { doubles[i] =
+     * ByteBuffer.wrap(byteArray, i * times, times).getDouble(); } return
+     * doubles; }
+     */
     public static void getPeak() throws DFTException, IOException {
         /**
          * Tone tone = new SineTone(440, (float) 0.95); int time = 5;//ask user
          * ffor number*
          */
         byte[] byteArray = tryStuff();
-        double[] doubleArray = toDoubleArray(byteArray);
-        Complex[] input = new Complex[doubleArray.length];
-        System.out.println(doubleArray.length);
+        //double[] doubleArray = toDoubleArray(byteArray);
+        float[] floatArray = AudioProcessor.byteArrayToFloats(byteArray, 0,
+                                                              byteArray.length,
+                                                              2);
+        System.out.println(floatArray.length);
+        Complex[] input = new Complex[floatArray.length];
+        //System.out.println(doubleArray.length);
         for (int i = 0; i < input.length; i++) {
-            input[i] = new Complex(doubleArray[i], 0);
+            input[i] = new Complex(floatArray[i], 0);
         }
 
         Complex[] output = computeFFT(input);
