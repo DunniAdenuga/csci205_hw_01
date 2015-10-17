@@ -16,9 +16,9 @@
 package hw02.fft;
 
 import org.junit.After;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -76,4 +76,16 @@ public class ComplexTest {
         assertEquals(expResult, result);
     }
 
+    /**
+     * Test of magnitude method, of class Complex.
+     */
+    @Test
+    public void testMagnitude_double() {
+        System.out.println("magnitude");
+        double scalar = 2.0;
+        Complex instance = new Complex(4, 3);
+        double expResult = 5;
+        double result = instance.magnitude();
+        assertEquals(expResult, result, 1E-10);
+    }
 }
