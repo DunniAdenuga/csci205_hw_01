@@ -22,6 +22,8 @@ package hw02.tone;
 import hw02.dsp.AudioProcessor;
 import hw02.dsp.ConvolutionBuilder;
 import hw02.dsp.VolumeControl;
+import hw02.fft.DFTException;
+import hw02.fft.FFT;
 import hw02.source.SawtoothTone;
 import hw02.source.SineTone;
 import hw02.source.SquareTone;
@@ -29,7 +31,10 @@ import hw02.source.Tone;
 import hw02.source.TriangleTone;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
@@ -50,6 +55,8 @@ public class UserInterface {
      * @param args
      * @throws IOException
      * @throws InterruptedException
+     * @throws javax.sound.sampled.UnsupportedAudioFileException
+     * @throws javax.sound.sampled.LineUnavailableException
      */
     public static void main(String[] args) throws IOException, InterruptedException, UnsupportedAudioFileException, LineUnavailableException, DFTException {
         Tone tone = null;
@@ -63,7 +70,6 @@ public class UserInterface {
         }
 
         if (reply.equals("2")) {
-
             existing();
         }
 
@@ -75,7 +81,7 @@ public class UserInterface {
      * @throws InterruptedException
      * @throws IOException
      */
-    public static void existing() throws InterruptedException, IOException, UnsupportedAudioFileException, LineUnavailableException {
+    public static void existing() throws InterruptedException, IOException, UnsupportedAudioFileException, LineUnavailableException, DFTException {
         Scanner input = new Scanner(System.in);
         String wavFile;
 
@@ -89,6 +95,14 @@ public class UserInterface {
                     "Information about your WaveForm is printed below! ");
 
             WavePlay.display(wavFile);
+
+            int numfreq = askInt(
+                    "How many of the top frequencies do you want to find? ",
+                    input);
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(
+                    wavFile));
+            displayTopFrequencies(audioIn, numfreq);
+
             downsampleFile(wavFile);
             delayFile(wavFile);
             volumeFile(wavFile, 5);
@@ -151,12 +165,18 @@ public class UserInterface {
                 "Information about your WaveForm is printed below! ");
 
         WavePlay.display(tone.getAudioInputStream(time));
+
+        int numfreq = askInt(
+                "How many of the top frequencies do you want to find? ",
+                input);
+        displayTopFrequencies(tone.getAudioInputStream(time), numfreq);
+
         downsampleTone(tone, typeTone);
         delayTone(tone, time);
         volumeTone(tone, time);
         System.out.println("Enter number of peaks for DFT: ");
         int num = input.nextInt();
-        DFT.getPeak(tone, num);
+
     }
 
     /**
@@ -243,6 +263,23 @@ public class UserInterface {
         } catch (NumberFormatException nfe) {
             System.out.println("Not a valid number!");
             return askDouble(question, input);
+        }
+    }
+
+    /**
+     * Ask a question until the user gives a valid integer
+     *
+     * @param question The question to ask
+     * @param input The scanner to use
+     * @return A double from user input
+     */
+    private static int askInt(String question, Scanner input) {
+        System.out.print(question);
+        try {
+            return Integer.parseInt(input.next());
+        } catch (NumberFormatException nfe) {
+            System.out.println("Not a valid number!");
+            return askInt(question, input);
         }
     }
 
@@ -369,5 +406,33 @@ public class UserInterface {
         System.out.print("Volume Adjusted File saved in volumeAdjusted.wav.");
         WavePlay.saveWav(newAudio, "volumeAdjusted.wav");
 
+    }
+
+    /**
+     * Display top frequencies from present in an audio input
+     *
+     * @param audio The audio input
+     * @param numFreq The number of frequencies to find
+     * @throws java.io.IOException
+     * @throws hw02.fft.DFTException
+     * @author Tim Woodford
+     */
+    public static void displayTopFrequencies(AudioInputStream audio, int numFreq) throws IOException, DFTException {
+        List<Double> fft = Arrays.stream(FFT.computeFFT(audio)).map(
+                cmplx -> cmplx.magnitude()).collect(Collectors.toList());
+        final float sampleRate = audio.getFormat().getFrameRate();
+        float[] freq = FFT.frequenciesFFT(sampleRate, fft.size());
+        double[][] table = new double[fft.size() / 2][2];
+        for (int i = 0; i < table.length; i++) {
+            table[i][0] = fft.get(i);
+            table[i][1] = freq[i];
+        }
+        Arrays.sort(table,
+                    (double[] o1, double[] o2) -> o1[0] < o2[0] ? 1 : -1);
+        System.out.println("Frequencies with the highest amplitudes:");
+        for (int i = 0; i < 5; i++) {
+            System.out.format("%.1f (magnitude: %.1f)\n", table[i][1],
+                              table[i][0]);
+        }
     }
 }
