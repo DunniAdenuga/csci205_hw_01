@@ -16,6 +16,7 @@
 package hw02.fft;
 
 import hw02.source.SineTone;
+import hw02.tone.UserInterface;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,9 +35,12 @@ public class FFTCSVTest {
      */
     public static void main(String[] args) throws IOException, DFTException {
         AudioInputStream audio = new SineTone(10, (float) 0.95).getAudioInputStream(
-                40);
+                10);
 
         Complex[] output = FFT.computeFFT(audio);
+
+        UserInterface.displayTopFrequencies(
+                new SineTone(10, (float) 0.95).getAudioInputStream(10), 5);
 
         float[] frequencies = FFT.frequenciesFFT(44100, output.length);
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(
