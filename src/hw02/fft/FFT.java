@@ -15,6 +15,10 @@
  */
 package hw02.fft;
 
+import hw02.dsp.AudioProcessor;
+import java.io.IOException;
+import javax.sound.sampled.AudioInputStream;
+
 /**
  * A simple implementation of the Cooley-Tukey (time-decimation) FFT algorithm
  *
@@ -65,6 +69,35 @@ public class FFT {
             answer[i + N / 2] = result2[i].minus(wk.multiply(result1[i]));
         }
         return answer;
+    }
+
+    /**
+     * Run the Cooley-Tukey FFT algorithm
+     *
+     * @param audio An AudioInputStream with the audio input
+     * @return The FFT of the audio
+     * @throws IOException If there is a problem with the audio input
+     * @throws DFTException If the size of the input is not a power of 2
+     * @author Tim Woodford
+     */
+    public static Complex[] computeFFT(AudioInputStream audio) throws IOException, DFTException {
+        // Convert the audio input to the corresponding float values
+        int inlen = (int) audio.getFrameLength();
+        byte[] abytes = new byte[inlen * audio.getFormat().getFrameSize()];
+        audio.read(abytes);
+        float[] floatArray = AudioProcessor.byteArrayToFloats(abytes, 0,
+                                                              abytes.length,
+                                                              2);
+        // Convert floats to complex & pad to a power of 2
+        int p2 = (int) Math.pow(2, Math.ceil(Math.log(inlen) / Math.log(2)));
+        Complex[] cmplx = new Complex[p2];
+        for (int i = 0; i < inlen; i++) {
+            cmplx[i] = new Complex(floatArray[i], 0);
+        }
+        for (int i = inlen; i < p2; i++) {
+            cmplx[i] = new Complex(0, 0);
+        }
+        return computeFFT(cmplx);
     }
 
     /**
