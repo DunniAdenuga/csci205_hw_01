@@ -51,7 +51,7 @@ public class UserInterface {
      * @throws IOException
      * @throws InterruptedException
      */
-    public static void main(String[] args) throws IOException, InterruptedException, UnsupportedAudioFileException, LineUnavailableException {
+    public static void main(String[] args) throws IOException, InterruptedException, UnsupportedAudioFileException, LineUnavailableException, DFTException {
         Tone tone = null;
         Scanner input = new Scanner(System.in);
         System.out.println("Welcome to THE TONE");
@@ -122,7 +122,7 @@ public class UserInterface {
      * @throws IOException
      * @throws InterruptedException
      */
-    public static void generate() throws IOException, InterruptedException, LineUnavailableException {
+    public static void generate() throws IOException, InterruptedException, LineUnavailableException, DFTException {
         Scanner input = new Scanner(System.in);
         Tone tone = null;
         int time = 5;
@@ -154,7 +154,9 @@ public class UserInterface {
         downsampleTone(tone, typeTone);
         delayTone(tone, time);
         volumeTone(tone, time);
-
+        System.out.println("Enter number of peaks for DFT: ");
+        int num = input.nextInt();
+        DFT.getPeak(tone, num);
     }
 
     /**
