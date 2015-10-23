@@ -19,7 +19,7 @@
  * - Java Sound Resources http://www.jsresources.org
  * ****************************************
  */
-package hw3.utility;
+package hw03.utility;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +40,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class AudioUtility {
 
     /**
-     * Print out the audio file format information pulled from an actual WAV file
+     * Print out the audio file format information pulled from an actual WAV
+     * file
      *
      * @param inFile - A File handle to a WAV file
      *
@@ -93,12 +94,12 @@ public class AudioUtility {
     }
 
     /**
-     * Utility file to play an AudioInputStream using the Java sound system. This
-     * code is modeled off code from the Java Sound tutorial, as well as
+     * Utility file to play an AudioInputStream using the Java sound system.
+     * This code is modeled off code from the Java Sound tutorial, as well as
      * <a href=http://www.jsresources.org>jsresources.org</a>
      *
-     * @param in - AudioInputStream instance that contains data to be played
-     * by the Java Sound system
+     * @param in - AudioInputStream instance that contains data to be played by
+     * the Java Sound system
      *
      * @throws LineUnavailableException
      * @throws IOException

@@ -14,7 +14,7 @@
  * problems that may arise
  * ****************************************
  */
-package hw3.model;
+package hw03.model;
 
 /**
  * Simple exception to represent possible problems that may arise with the
@@ -28,4 +28,3 @@ public class WaveFormException extends Exception {
         super(message);
     }
 }
-
