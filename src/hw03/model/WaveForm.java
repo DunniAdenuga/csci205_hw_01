@@ -14,7 +14,7 @@
  * can be read in from a WAV file, or generated using a specific tone
  * ****************************************
  */
-package hw3.model;
+package hw03.model;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -82,7 +82,8 @@ public class WaveForm {
         // Get the AudioFormat object
         this.format = inStream.getFormat();
 
-        initBuffers((int) inStream.getFrameLength() * inStream.getFormat().getFrameSize());
+        initBuffers(
+                (int) inStream.getFrameLength() * inStream.getFormat().getFrameSize());
 
         // The hard work -- read in the array of bytes from the AudioInputStream!
         inStream.read(b);
@@ -170,14 +171,14 @@ public class WaveForm {
         initBuffers(b.limit());
 
         // Copy the array over to our waveform
-        for(int i = 0; i < b.limit(); i++) {
+        for (int i = 0; i < b.limit(); i++) {
             this.b[i] = b.get(i);
         }
     }
 
     /**
-     * A private helper method for the constructors. It does nothing more than sets
-     * up the different buffer types required for the program.
+     * A private helper method for the constructors. It does nothing more than
+     * sets up the different buffer types required for the program.
      *
      * @param newBufLen - length of internal buffer in bytes
      */
@@ -193,10 +194,11 @@ public class WaveForm {
         this.shortBufferWrapper = this.byteBufferWrapper.asShortBuffer();
     }
 
-
-    /**********************************************************************
-     *  Getter methods
-     **********************************************************************/
+    /**
+     * ********************************************************************
+     * Getter methods
+     *********************************************************************
+     */
     public AudioFormat getFormat() {
         return format;
     }
