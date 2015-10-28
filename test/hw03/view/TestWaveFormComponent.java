@@ -15,6 +15,8 @@
  */
 package hw03.view;
 
+import hw03.model.AudioChannel;
+import hw03.model.AudioModel;
 import hw03.model.SampleSizeType;
 import hw03.model.WaveForm;
 import hw03.model.WaveFormException;
@@ -35,7 +37,10 @@ public class TestWaveFormComponent {
                                    5000.0 / 44100);
         JFrame fr = new JFrame("Wave Component Test");
         fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        fr.add(new WaveFormComponent(wf));
+        AudioModel am = new AudioModel();
+        am.setWaveForm(wf);
+        am.setChannel(AudioChannel.MONO);
+        fr.add(new WaveFormComponent(am));
         fr.pack();
         fr.setVisible(true);
     }

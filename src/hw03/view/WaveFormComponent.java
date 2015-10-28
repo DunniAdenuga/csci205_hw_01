@@ -15,14 +15,11 @@
  */
 package hw03.view;
 
-import hw03.model.SampleSizeType;
-import hw03.model.WaveForm;
+import hw03.model.AudioModel;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
 import javax.swing.JComponent;
 
 /**
@@ -30,14 +27,10 @@ import javax.swing.JComponent;
  * @author tww014
  */
 public class WaveFormComponent extends JComponent {
-    private final WaveForm wave;
+    private final AudioModel audio;
 
-    public WaveFormComponent(WaveForm wave) {
-        this.wave = wave;
-        if (wave.getFormat().getChannels() != 1) {
-            throw new RuntimeException(); // TODO
-        }
-        setSize(wave.getSampleLength(), 100);
+    public WaveFormComponent(AudioModel audio) {
+        this.audio = audio;
     }
 
     @Override
@@ -48,30 +41,18 @@ public class WaveFormComponent extends JComponent {
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                                  RenderingHints.VALUE_ANTIALIAS_ON);
         }
-        ByteBuffer bbuf = wave.getByteBufferWrapper();
-        bbuf.rewind();
-        ShortBuffer sbuf = wave.getShortBufferWrapper();
-        sbuf.rewind();
-        SampleSizeType sst = wave.getSampleSize();
+        double[] samples = audio.getWaveData();
         final int height = getBounds().height;
         final int width = getBounds().width;
-        int scaleFactor = height / (sst == SampleSizeType.EIGHT_BIT ? Byte.MAX_VALUE : Short.MAX_VALUE);
         g.setColor(Color.blue);
-        int samplesPerLine = wave.getSampleLength() / width;
+        int samplesPerLine = samples.length / width;
+        double scaleFactor = (double) height / samplesPerLine;
         for (int line = 0; line < width; line++) {
-            int value = averageSamples(samplesPerLine, sst, bbuf, sbuf);
-            g.drawLine(line, height, line,
-                       height - scaleFactor * value);
+            double value = 0;
+            for (int sample = 0; sample < samplesPerLine; sample++) {
+                value += Math.abs(samples[line * samplesPerLine + sample]);
+            }
+            g.drawLine(line, height, line, (int) (height - scaleFactor * value));
         }
-    }
-
-    public int averageSamples(int samplesPerLine, SampleSizeType sst,
-                              ByteBuffer bbuf, ShortBuffer sbuf) {
-        int value = 0;
-        for (int sample = 0; sample < samplesPerLine; sample++) {
-            value += Math.abs(
-                    sst == SampleSizeType.EIGHT_BIT ? bbuf.get() : sbuf.get());
-        }
-        return value / samplesPerLine;
     }
 }

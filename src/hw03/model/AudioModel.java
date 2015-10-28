@@ -29,16 +29,21 @@ public class AudioModel {
     private WaveForm audioData;
     private AudioChannel channel;
 
+    public void setWaveForm(WaveForm audio) {
+        audioData = audio;
+    }
+
     public boolean isStereo() {
         return audioData.getFormat().getChannels() > 1;
     }
 
-    public double[] getWaveData() throws InvalidModelException {
+    public double[] getWaveData() {
         int outLen = audioData.getSampleLength() / (1 + channel.distance);
         double[] out = new double[outLen];
         double normalizationFactor = audioData.getSampleSize() == SampleSizeType.EIGHT_BIT ? Byte.MAX_VALUE : Short.MAX_VALUE;
         if (audioData.getSampleSize() == SampleSizeType.EIGHT_BIT) {
             ByteBuffer buf = audioData.getByteBufferWrapper();
+            buf.rewind();
             // Move past the channel offset
             for (int i = 0; i < channel.offset; i++) {
                 buf.get();
@@ -53,6 +58,7 @@ public class AudioModel {
             }
         } else if (audioData.getSampleSize() == SampleSizeType.SIXTEEN_BIT) {
             ShortBuffer buf = audioData.getShortBufferWrapper();
+            buf.rewind();
             // Move past the channel offset
             for (int i = 0; i < channel.offset; i++) {
                 buf.get();
@@ -65,8 +71,6 @@ public class AudioModel {
                     buf.get();
                 }
             }
-        } else {
-            throw new InvalidModelException("Unsupported sample size");
         }
         return out;
     }
