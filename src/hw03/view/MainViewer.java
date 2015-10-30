@@ -16,8 +16,9 @@
 package hw03.view;
 
 /**
+ * The REAL GUI
  *
- * @author ia005
+ * @author Dunni Adenuga
  */
 import java.awt.GridLayout;
 import javax.swing.JButton;
@@ -32,6 +33,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * Uses JDialog and an object of frame to render GUI
+ *
+ * @author ia005
+ */
 public class MainViewer extends JDialog {
     private JTextField freqText = new JTextField(10);
     private JTextField sampleRateText = new JTextField(10);
@@ -92,15 +98,26 @@ public class MainViewer extends JDialog {
 
     }
 
+    /**
+     * Show the JDialog part of this class
+     */
     public void dialogBox() {
 
         setVisible(true);
     }
 
+    /**
+     * Display JFileChooser
+     *
+     * @return If "Ok" was chosen
+     */
     public int chooseFile() {
         return chooser.showOpenDialog(frame);
     }
 
+    /**
+     * If Exit is chosen on GUI close everything
+     */
     public void exitOption() {
         JOptionPane.showMessageDialog(frame, "Good-Bye!");
         frame.setVisible(false);
