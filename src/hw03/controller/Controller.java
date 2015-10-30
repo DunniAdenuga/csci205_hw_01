@@ -27,8 +27,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
+ * Join the View to the Model
  *
- * @author ia005
+ * @author Dunni Adenuga
  */
 public class Controller implements ActionListener {
     MainViewer theView;
@@ -49,6 +50,9 @@ public class Controller implements ActionListener {
         theView.getPlotButton2().addActionListener(this);
     }
 
+    /**
+     * Update View From Model
+     */
     public void updateViewFromModel() {
         theView.getFreqText().setText(String.valueOf(theModel.getFrequency()));
         theView.getSampleRateText().setText(String.valueOf(
@@ -57,6 +61,9 @@ public class Controller implements ActionListener {
     }
 
     @Override
+    /**
+     * If there's a change in GUI, an action. do something
+     */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == theView.getNewAction()) {
             theView.dialogBox();
@@ -109,9 +116,10 @@ public class Controller implements ActionListener {
         }
 
         if (e.getSource() == theView.getPlotButton()) {
-            JFrame stuff = new JFrame();
-            System.out.println("here 1");
+            JFrame stuff = theModel.getWaveFrame();
+
             try {
+                //stuff.removeAll();
                 stuff.getContentPane().add(theModel.getWaveTN());
                 //stuff.setViewportView(theModel.getWaveTN());
 
@@ -121,13 +129,14 @@ public class Controller implements ActionListener {
                                               JOptionPane.ERROR_MESSAGE);
             }
             stuff.setVisible(true);
-            stuff.pack();
-            stuff.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            stuff.setSize(200, 200);
+            //stuff.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
         if (e.getSource() == theView.getPlotButton2()) {
-            System.out.println("here 2");
-            JFrame stuff = new JFrame();
+
+            JFrame stuff = theModel.getWaveFrame();
             try {
+                //stuff.removeAll();
                 stuff.getContentPane().add(theModel.getWaveTF());
                 //stuff.setViewportView(theModel.getWaveTF());
                 //theModel.getWaveTF().setVisible(true);
@@ -148,8 +157,8 @@ public class Controller implements ActionListener {
             }
             stuff.setVisible(true);
 
-            stuff.pack();
-            stuff.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            stuff.setSize(200, 200);
+            //stuff.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         }
 
