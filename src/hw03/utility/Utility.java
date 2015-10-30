@@ -15,6 +15,7 @@
  */
 package hw03.utility;
 
+import hw03.model.AudioChannel;
 import hw03.model.AudioModel;
 import hw03.model.SampleSizeType;
 import hw03.model.WaveForm;
@@ -39,8 +40,8 @@ public class Utility {
     }
 
     public static WaveFormComponent generateWaveFormComponent(WaveForm newWave) {
-        AudioModel model = new AudioModel();
-        model.setWaveForm(newWave);
+        AudioModel model = new AudioModel(newWave);
+        model.setChannel(AudioChannel.LEFT);
         return new WaveFormComponent(model);
     }
 
