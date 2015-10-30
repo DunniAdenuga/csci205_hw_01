@@ -20,10 +20,11 @@ import hw03.view.WaveFormComponent;
 import java.io.File;
 import java.io.IOException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.JFrame;
 
 /**
  *
- * @author ia005
+ * @author Dunni Adenuga Model for GUI
  */
 public class Model {
 
@@ -32,6 +33,7 @@ public class Model {
     private double length;
     private File wavFile;
     private WaveFormComponent wave;
+    private JFrame waveFrame = new JFrame();
 
     public Model() throws WaveFormException {
         this.frequency = 440;
@@ -73,11 +75,27 @@ public class Model {
         this.wavFile = wavFile;
     }
 
+    /**
+     * Get WAveCOmponent Through file streams
+     *
+     * @return the wave Component
+     * @throws WaveFormException
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     */
     public WaveFormComponent getWaveTF() throws WaveFormException, UnsupportedAudioFileException, IOException {
         wave = Utility.generateWaveFormComponent(wavFile);
         return wave;
     }
 
+    /**
+     * Get WAveCOmponent generation of new
+     *
+     * @return the wave Component
+     * @throws WaveFormException
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     */
     public WaveFormComponent getWaveTN() throws WaveFormException {
         wave = Utility.generateWaveFormComponent(frequency, sampleRate, length);
         return wave;
@@ -86,4 +104,13 @@ public class Model {
     public void setWave(WaveFormComponent wave) {
         this.wave = wave;
     }
+
+    public JFrame getWaveFrame() {
+        return waveFrame;
+    }
+
+    public void setWaveFrame(JFrame waveFrame) {
+        this.waveFrame = waveFrame;
+    }
+
 }
