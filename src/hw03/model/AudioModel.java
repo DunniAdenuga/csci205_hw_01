@@ -15,11 +15,16 @@
  */
 package hw03.model;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.DefaultComboBoxModel;
@@ -35,12 +40,28 @@ public class AudioModel {
     private WaveForm audioData;
     private AudioChannel channel;
     private final DefaultBoundedRangeModel rangeModel;
+    private Clip audioPlayer;
 
-    public AudioModel(WaveForm audioData) {
+    public AudioModel(WaveForm audioData) throws LineUnavailableException, IOException {
         this.audioData = audioData;
         this.rangeModel = new DefaultBoundedRangeModel(STARTING_WIDTH, 738,
                                                        STARTING_WIDTH,
                                                        audioData.getSampleLength() / 2);
+        preparePlayer();
+    }
+
+    /**
+     * Prepare player to start again. This means that any old data will be
+     * flushed from the stream, and the stream will be reinitialized.
+     *
+     * @throws IOException
+     * @throws LineUnavailableException
+     */
+    public void preparePlayer() throws IOException, LineUnavailableException {
+        DataLine.Info info = new DataLine.Info(Clip.class, audioData.getFormat());
+        audioPlayer = (Clip) AudioSystem.getLine(info);
+        audioPlayer.flush();
+        audioPlayer.open(audioData.getAudioInputStream());
     }
 
     /**
@@ -115,11 +136,40 @@ public class AudioModel {
                 new AudioChannel[0]));
     }
 
+    /**
+     * Get a range model for use with the zoom slider
+     *
+     * @return A range model
+     */
     public DefaultBoundedRangeModel getRangeModel() {
         return rangeModel;
     }
 
+    /**
+     * Get the current zoom width
+     *
+     * @return The zoom width in pixels
+     */
     public int getZoom() {
         return rangeModel.getValue();
+    }
+
+    /**
+     * Start playing the audio
+     */
+    public void playAudio() {
+        audioPlayer.start();
+    }
+
+    /**
+     * Pause the audio. Note that to truly pause the audio, other components
+     * must properly account for pauses.
+     */
+    public void stopAudio() {
+        audioPlayer.stop();
+    }
+
+    public Clip getAudioPlayer() {
+        return audioPlayer;
     }
 }
