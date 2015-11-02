@@ -27,8 +27,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
+ * Join the View to the Model
  *
- * @author ia005
+ * @author Dunni Adenuga
  */
 public class Controller implements ActionListener {
     MainViewer theView;
@@ -49,6 +50,9 @@ public class Controller implements ActionListener {
         theView.getPlotButton2().addActionListener(this);
     }
 
+    /**
+     * Update View From Model
+     */
     public void updateViewFromModel() {
         theView.getFreqText().setText(String.valueOf(theModel.getFrequency()));
         theView.getSampleRateText().setText(String.valueOf(
@@ -57,6 +61,9 @@ public class Controller implements ActionListener {
     }
 
     @Override
+    /**
+     * If there's a change in GUI, an action. do something
+     */
     public void actionPerformed(ActionEvent e) {
         ///////////
         if (e.getSource() == theView.getNewAction()) {

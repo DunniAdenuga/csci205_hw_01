@@ -37,7 +37,7 @@ public class TestWaveFormComponent {
                                    5000.0 / 44100);
         JFrame fr = new JFrame("Wave Component Test");
         fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        AudioModel am = new AudioModel();
+        AudioModel am = new AudioModel(wf);
         am.setWaveForm(wf);
         am.setChannel(AudioChannel.MONO);
         fr.add(new WaveFormComponent(am));

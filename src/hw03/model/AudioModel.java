@@ -31,6 +31,10 @@ public class AudioModel {
     private WaveForm audioData;
     private AudioChannel channel;
 
+    public AudioModel(WaveForm audioData) {
+        this.audioData = audioData;
+    }
+
     public void setWaveForm(WaveForm audio) {
         audioData = audio;
     }
