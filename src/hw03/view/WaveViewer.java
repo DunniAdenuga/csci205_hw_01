@@ -25,7 +25,7 @@ import javax.swing.JSlider;
  * @author tww014
  */
 public class WaveViewer extends javax.swing.JFrame {
-    public WaveFormComponent wfc;
+    private WaveFormComponent wfc;
 
     /**
      * Creates new form WaveViewer
@@ -120,6 +120,16 @@ public class WaveViewer extends javax.swing.JFrame {
      */
     public JSlider getZoomSlider() {
         return zoomSlider;
+    }
+
+    /**
+     * Update the view
+     */
+    public void refresh() {
+        this.wfc.revalidate();
+        this.wfc.repaint();
+        this.revalidate();
+        this.repaint();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -49,8 +49,7 @@ public class WaveFormController implements ActionListener, ChangeListener {
         if (e.getSource() == viewer.getChannelSelector()) {
             model.setChannel(
                     (AudioChannel) viewer.getChannelSelector().getSelectedItem());
-            viewer.revalidate();
-            viewer.repaint();
+            viewer.refresh();
         }
     }
 
@@ -58,10 +57,7 @@ public class WaveFormController implements ActionListener, ChangeListener {
     public void stateChanged(ChangeEvent e) {
         if (e.getSource() == viewer.getZoomSlider()) {
             // Zoom level is fetched directly from the slider's model
-            viewer.wfc.revalidate();
-            viewer.wfc.repaint();
-            viewer.revalidate();
-            viewer.repaint();
+            viewer.refresh();
         }
     }
 }
