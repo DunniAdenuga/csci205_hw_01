@@ -73,11 +73,25 @@ public class Model {
         this.wavFile = wavFile;
     }
 
+    /**
+     * Get the waveform component for the selected audio file
+     *
+     * @return A waveform component corresponding to the audio file
+     * @throws WaveFormException
+     * @throws UnsupportedAudioFileException
+     * @throws IOException
+     */
     public WaveFormComponent getWaveTF() throws WaveFormException, UnsupportedAudioFileException, IOException {
         wave = Utility.generateWaveFormComponent(wavFile);
         return wave;
     }
 
+    /**
+     * Get a waveform component for the selected sine wave
+     *
+     * @return The <code>WaveFormComponent</code> for the selected sine wave
+     * @throws WaveFormException
+     */
     public WaveFormComponent getWaveTN() throws WaveFormException {
         wave = Utility.generateWaveFormComponent(frequency, sampleRate, length);
         return wave;
