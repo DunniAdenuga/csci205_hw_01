@@ -110,7 +110,6 @@ public class Controller implements ActionListener {
 
         if (e.getSource() == theView.getPlotButton()) {
             JFrame stuff = new JFrame();
-            System.out.println("here 1");
             try {
                 stuff.getContentPane().add(theModel.getWaveTN());
                 //stuff.setViewportView(theModel.getWaveTN());
@@ -125,7 +124,6 @@ public class Controller implements ActionListener {
             stuff.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
         if (e.getSource() == theView.getPlotButton2()) {
-            System.out.println("here 2");
             JFrame stuff = new JFrame();
             try {
                 stuff.getContentPane().add(theModel.getWaveTF());
