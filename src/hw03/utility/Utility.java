@@ -22,6 +22,7 @@ import hw03.model.WaveFormException;
 import hw03.view.WaveFormComponent;
 import java.io.File;
 import java.io.IOException;
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
@@ -32,19 +33,19 @@ public class Utility {
 
     public static WaveFormComponent generateWaveFormComponent(float freq,
                                                               float sampleRate,
-                                                              double length) throws WaveFormException {
+                                                              double length) throws WaveFormException, LineUnavailableException, IOException {
         WaveForm newWave = new WaveForm(freq, sampleRate,
                                         SampleSizeType.SIXTEEN_BIT, length);
         return generateWaveFormComponent(newWave);
     }
 
-    public static WaveFormComponent generateWaveFormComponent(WaveForm newWave) {
+    public static WaveFormComponent generateWaveFormComponent(WaveForm newWave) throws LineUnavailableException, IOException {
         AudioModel model = new AudioModel(newWave);
         model.setChannel(model.getValidChannels().get(0));
         return new WaveFormComponent(model);
     }
 
-    public static WaveFormComponent generateWaveFormComponent(File file) throws WaveFormException, UnsupportedAudioFileException, IOException {
+    public static WaveFormComponent generateWaveFormComponent(File file) throws WaveFormException, UnsupportedAudioFileException, IOException, LineUnavailableException {
         WaveForm newWave = new WaveForm(file);
         return generateWaveFormComponent(newWave);
     }

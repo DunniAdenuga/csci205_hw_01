@@ -20,6 +20,12 @@ import hw03.model.AudioModel;
 import hw03.view.WaveViewer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineEvent.Type;
+import javax.sound.sampled.LineListener;
+import javax.sound.sampled.LineUnavailableException;
+import javax.swing.JOptionPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -28,7 +34,8 @@ import javax.swing.event.ChangeListener;
  *
  * @author tww014
  */
-public class WaveFormController implements ActionListener, ChangeListener {
+public class WaveFormController implements ActionListener, ChangeListener,
+                                           LineListener {
     private final WaveViewer viewer;
     private final AudioModel model;
 
@@ -42,6 +49,7 @@ public class WaveFormController implements ActionListener, ChangeListener {
         viewer1.getChannelSelector().addActionListener(this);
         viewer1.getPlayPauseButton().addActionListener(this);
         viewer1.getZoomSlider().addChangeListener(this);
+        model.getAudioPlayer().addLineListener(this);
     }
 
     @Override
@@ -50,6 +58,25 @@ public class WaveFormController implements ActionListener, ChangeListener {
             model.setChannel(
                     (AudioChannel) viewer.getChannelSelector().getSelectedItem());
             viewer.refresh();
+        } else if (e.getSource() == viewer.getPlayPauseButton()) {
+            if (viewer.getPlayPauseButton().getText().equals("Play")) {
+                viewer.getPlayPauseButton().setText("Stop");
+                model.playAudio();
+            } else if (viewer.getPlayPauseButton().getText().equals("Stop")) {
+                viewer.getPlayPauseButton().setText("Play");
+                model.stopAudio();
+                try {
+                    model.preparePlayer();
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(viewer, ex,
+                                                  "Unexpected error stopping playback",
+                                                  JOptionPane.ERROR_MESSAGE);
+                } catch (LineUnavailableException ex) {
+                    JOptionPane.showMessageDialog(viewer, ex,
+                                                  "Unexpected error stopping playback",
+                                                  JOptionPane.ERROR_MESSAGE);
+                }
+            }
         }
     }
 
@@ -58,6 +85,24 @@ public class WaveFormController implements ActionListener, ChangeListener {
         if (e.getSource() == viewer.getZoomSlider()) {
             // Zoom level is fetched directly from the slider's model
             viewer.refresh();
+        }
+    }
+
+    @Override
+    public void update(LineEvent event) {
+        if (event.getType() == Type.STOP) {
+            try {
+                model.preparePlayer();
+                viewer.getPlayPauseButton().setText("Play");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(viewer, ex,
+                                              "Unexpected error stopping playback",
+                                              JOptionPane.ERROR_MESSAGE);
+            } catch (LineUnavailableException ex) {
+                JOptionPane.showMessageDialog(viewer, ex,
+                                              "Unexpected error stopping playback",
+                                              JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 }
