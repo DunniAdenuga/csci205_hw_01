@@ -20,6 +20,8 @@ import java.nio.ShortBuffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -83,5 +85,10 @@ public class AudioModel {
         int distance = isStereo() ? 1 : 0; // Proper distance value for channel
         return Arrays.stream(AudioChannel.values()).filter(
                 chan -> chan.distance == distance).collect(Collectors.toList());
+    }
+
+    public ComboBoxModel<AudioChannel> channelModel() {
+        return new DefaultComboBoxModel<>(getValidChannels().toArray(
+                new AudioChannel[0]));
     }
 }

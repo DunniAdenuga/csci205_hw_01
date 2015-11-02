@@ -33,6 +33,10 @@ public class WaveFormComponent extends JComponent {
         this.audio = audio;
     }
 
+    public AudioModel getAudioModel() {
+        return audio;
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         // Turn on antialiasing if available

@@ -41,6 +41,7 @@ public class Utility {
     public static WaveFormComponent generateWaveFormComponent(WaveForm newWave) {
         AudioModel model = new AudioModel();
         model.setWaveForm(newWave);
+        model.setChannel(model.getValidChannels().get(0));
         return new WaveFormComponent(model);
     }
 

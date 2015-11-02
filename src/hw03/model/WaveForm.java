@@ -100,7 +100,7 @@ public class WaveForm {
      *
      * @param freq of tone to generate (Hz)
      * @param sampleRate sample rate of waveform to generate (Hz)
-     * @param sampleSizeInBits Number of bits per sample
+     * @param sampleSize Number of bits per sample
      * @param lengthInSec Duration of waveform (sec)
      *
      * @return A buffered AudioInputStream object
@@ -197,7 +197,7 @@ public class WaveForm {
     /**
      * ********************************************************************
      * Getter methods
-     *********************************************************************
+     * ********************************************************************
      */
     public AudioFormat getFormat() {
         return format;

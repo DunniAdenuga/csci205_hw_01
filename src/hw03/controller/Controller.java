@@ -18,12 +18,12 @@ package hw03.controller;
 import hw03.model.Model;
 import hw03.model.WaveFormException;
 import hw03.view.MainViewer;
+import hw03.view.WaveViewer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -58,6 +58,7 @@ public class Controller implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        ///////////
         if (e.getSource() == theView.getNewAction()) {
             theView.dialogBox();
             updateViewFromModel();
@@ -70,6 +71,7 @@ public class Controller implements ActionListener {
             }
 
         }
+        //////////
         if (e.getSource() == theView.getExitAction()) {
             theView.exitOption();
         }
@@ -109,27 +111,19 @@ public class Controller implements ActionListener {
         }
 
         if (e.getSource() == theView.getPlotButton()) {
-            JFrame stuff = new JFrame();
             try {
-                stuff.getContentPane().add(theModel.getWaveTN());
-                //stuff.setViewportView(theModel.getWaveTN());
-
+                WaveViewer viewer = new WaveViewer(theModel.getWaveTN());
+                viewer.setVisible(true);
             } catch (WaveFormException ex) {
                 JOptionPane.showMessageDialog(theView, "Error!",
                                               " WaveForm Error!",
                                               JOptionPane.ERROR_MESSAGE);
             }
-            stuff.setVisible(true);
-            stuff.pack();
-            stuff.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
         if (e.getSource() == theView.getPlotButton2()) {
-            JFrame stuff = new JFrame();
             try {
-                stuff.getContentPane().add(theModel.getWaveTF());
-                //stuff.setViewportView(theModel.getWaveTF());
-                //theModel.getWaveTF().setVisible(true);
-
+                WaveViewer viewer = new WaveViewer(theModel.getWaveTF());
+                viewer.setVisible(true);
             } catch (WaveFormException ex) {
                 JOptionPane.showMessageDialog(theView, "Error!",
                                               " WaveForm Error!",
@@ -144,11 +138,6 @@ public class Controller implements ActionListener {
                                               " IOException Error...!",
                                               JOptionPane.ERROR_MESSAGE);
             }
-            stuff.setVisible(true);
-
-            stuff.pack();
-            stuff.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         }
 
     }
