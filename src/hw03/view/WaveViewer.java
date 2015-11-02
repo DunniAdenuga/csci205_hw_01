@@ -46,7 +46,7 @@ public class WaveViewer extends javax.swing.JFrame {
         javax.swing.JPanel controlPanel = new javax.swing.JPanel();
         channelSelector = new javax.swing.JComboBox();
         playPauseButton = new javax.swing.JButton();
-        displayPanel = new javax.swing.JPanel();
+        displayPanel = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -67,15 +67,13 @@ public class WaveViewer extends javax.swing.JFrame {
         controlPanel.add(playPauseButton);
 
         getContentPane().add(controlPanel, java.awt.BorderLayout.PAGE_END);
-
-        displayPanel.setLayout(new javax.swing.BoxLayout(displayPanel, javax.swing.BoxLayout.LINE_AXIS));
         getContentPane().add(displayPanel, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void initModel(WaveFormComponent wfc) {
-        displayPanel.add(wfc);
+        displayPanel.setViewportView(wfc);
         channelSelector.setModel(wfc.getAudioModel().channelModel());
         pack();
     }
@@ -108,7 +106,7 @@ public class WaveViewer extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox channelSelector;
-    private javax.swing.JPanel displayPanel;
+    private javax.swing.JScrollPane displayPanel;
     private javax.swing.JButton playPauseButton;
     // End of variables declaration//GEN-END:variables
 }

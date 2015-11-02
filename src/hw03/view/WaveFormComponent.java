@@ -17,6 +17,7 @@ package hw03.view;
 
 import hw03.model.AudioModel;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -35,6 +36,25 @@ public class WaveFormComponent extends JComponent {
 
     public AudioModel getAudioModel() {
         return audio;
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        return new Dimension(getZoomWidth(), 100);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(getZoomWidth(), 200);
+    }
+
+    /**
+     * Get the width of the component based on the zoom level
+     *
+     * @return The width
+     */
+    private int getZoomWidth() {
+        return 300;
     }
 
     @Override
