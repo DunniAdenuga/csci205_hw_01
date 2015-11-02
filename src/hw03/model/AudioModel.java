@@ -21,20 +21,33 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.ComboBoxModel;
+import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.DefaultComboBoxModel;
 
 /**
+ * Model representing the displayed audio data
  *
  * @author Tim Woodford
  */
 public class AudioModel {
+    protected static final int STARTING_WIDTH = 300;
+
     private WaveForm audioData;
     private AudioChannel channel;
+    private final DefaultBoundedRangeModel rangeModel;
 
     public AudioModel(WaveForm audioData) {
         this.audioData = audioData;
+        this.rangeModel = new DefaultBoundedRangeModel(STARTING_WIDTH, 738,
+                                                       STARTING_WIDTH,
+                                                       audioData.getSampleLength() / 2);
     }
 
+    /**
+     * Set the waveform to display
+     *
+     * @param audio
+     */
     public void setWaveForm(WaveForm audio) {
         audioData = audio;
     }
@@ -43,6 +56,12 @@ public class AudioModel {
         return audioData.getFormat().getChannels() > 1;
     }
 
+    /**
+     * Get the normalized wave data
+     *
+     * @return The normalized wave data
+     * @author Tim Woodford
+     */
     public double[] getWaveData() {
         int outLen = audioData.getSampleLength() / (1 + channel.distance);
         double[] out = new double[outLen];
@@ -94,5 +113,13 @@ public class AudioModel {
     public ComboBoxModel<AudioChannel> channelModel() {
         return new DefaultComboBoxModel<>(getValidChannels().toArray(
                 new AudioChannel[0]));
+    }
+
+    public DefaultBoundedRangeModel getRangeModel() {
+        return rangeModel;
+    }
+
+    public int getZoom() {
+        return rangeModel.getValue();
     }
 }

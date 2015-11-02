@@ -15,14 +15,17 @@
  */
 package hw03.view;
 
+import hw03.controller.WaveFormController;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JSlider;
 
 /**
  *
  * @author tww014
  */
 public class WaveViewer extends javax.swing.JFrame {
+    public WaveFormComponent wfc;
 
     /**
      * Creates new form WaveViewer
@@ -32,6 +35,7 @@ public class WaveViewer extends javax.swing.JFrame {
     public WaveViewer(WaveFormComponent wfc) {
         initComponents();
         initModel(wfc);
+        this.wfc = wfc;
     }
 
     /**
@@ -46,6 +50,7 @@ public class WaveViewer extends javax.swing.JFrame {
         javax.swing.JPanel controlPanel = new javax.swing.JPanel();
         channelSelector = new javax.swing.JComboBox();
         playPauseButton = new javax.swing.JButton();
+        zoomSlider = new javax.swing.JSlider();
         displayPanel = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -65,6 +70,7 @@ public class WaveViewer extends javax.swing.JFrame {
             }
         });
         controlPanel.add(playPauseButton);
+        controlPanel.add(zoomSlider);
 
         getContentPane().add(controlPanel, java.awt.BorderLayout.PAGE_END);
         getContentPane().add(displayPanel, java.awt.BorderLayout.CENTER);
@@ -75,6 +81,9 @@ public class WaveViewer extends javax.swing.JFrame {
     private void initModel(WaveFormComponent wfc) {
         displayPanel.setViewportView(wfc);
         channelSelector.setModel(wfc.getAudioModel().channelModel());
+        zoomSlider.setModel(wfc.getAudioModel().getRangeModel());
+        WaveFormController ctl = new WaveFormController(this,
+                                                        wfc.getAudioModel());
         pack();
     }
 
@@ -104,9 +113,19 @@ public class WaveViewer extends javax.swing.JFrame {
         return playPauseButton;
     }
 
+    /**
+     * Get the slider that controls the zoom level
+     *
+     * @return the slider that controls the zoom level
+     */
+    public JSlider getZoomSlider() {
+        return zoomSlider;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox channelSelector;
     private javax.swing.JScrollPane displayPanel;
     private javax.swing.JButton playPauseButton;
+    private javax.swing.JSlider zoomSlider;
     // End of variables declaration//GEN-END:variables
 }

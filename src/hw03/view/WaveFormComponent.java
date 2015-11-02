@@ -54,7 +54,7 @@ public class WaveFormComponent extends JComponent {
      * @return The width
      */
     private int getZoomWidth() {
-        return 300;
+        return audio.getZoom();
     }
 
     @Override

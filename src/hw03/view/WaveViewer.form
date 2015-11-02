@@ -59,6 +59,8 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="playPauseButtonActionPerformed"/>
           </Events>
         </Component>
+        <Component class="javax.swing.JSlider" name="zoomSlider">
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JScrollPane" name="displayPanel">
